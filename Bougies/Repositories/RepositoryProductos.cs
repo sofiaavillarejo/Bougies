@@ -41,5 +41,9 @@ namespace Bougies.Repositories
             await this.context.SaveChangesAsync();
         }
 
+        public Task UpdateProducto(string nombre, string descripcion, decimal precio, int stock, int idCategoria, int idDescuento, string imagen)
+        {
+            
+        }
     }
 }
