@@ -7,6 +7,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
+#region STORED PROCEDURES
+#endregion
+
 namespace Bougies.Repositories
 {
     public class RepositoryProductos: IRepositoryProductos
@@ -40,10 +43,38 @@ namespace Bougies.Repositories
             this.context.Producto.Add(nuevoProducto);
             await this.context.SaveChangesAsync();
         }
-
-        public Task UpdateProducto(string nombre, string descripcion, decimal precio, int stock, int idCategoria, int idDescuento, string imagen)
+        public async Task<Producto> FindProducto(int id)
         {
-            
+            var consulta = from datos in this.context.Producto where datos.Id == id select datos;
+            return await consulta.FirstOrDefaultAsync();
         }
+
+        public async Task UpdateProducto(int id, string nombre, string descripcion, decimal precio, int stock, int idCategoria, int? idDescuento, string imagen)
+        {
+            Producto prod = await this.FindProducto(id);
+
+            if (prod != null)
+            {
+                prod.Nombre = nombre;
+                prod.Descripcion = descripcion;
+                prod.Precio = precio;
+                prod.Stock = stock;
+                prod.IdCategoria = idCategoria;
+                prod.IdDescuento = idDescuento ?? 1;
+                prod.Imagen = imagen;
+
+                await this.context.SaveChangesAsync();
+            }
+        }
+
+        //extraer los descuentos de la bbdd
+        public async Task<List<Descuento>> GetDescuentosAsync()
+        {
+            var consulta = from datos in this.context.Descuento select datos;
+            return await consulta.ToListAsync();
+        }
+
+
+
     }
 }

@@ -1,0 +1,31 @@
+﻿@model Producto
+
+<h1 style="color:blue">Update Producto</h1>
+
+<p>
+    <a asp-controller="Productos" asp-action="Index">
+        Back to list
+    </a>
+</p>
+<form method="post">
+    <input type="hidden" name="id" value="@Model.Id"
+           class="form-control" />
+    <label>Nombre</label>
+    <input type="text" name="nombre" value="@Model.Nombre"
+           class="form-control" />
+    <label>Descripcion</label>
+    <input type="text" name="descripcion" value="@Model.Descripcion"
+           class="form-control" />
+    <label>Precio</label>
+    <input type="text" name="precio" value="@Model.Precio"
+        class="form-control" />
+    <label>Stock</label>
+    <input type="text" name="stock" value="@Model.Stock"
+    <label>Id Categoría</label>
+    <input type="text" name="idcategoria" value="@Model.IdCategoria" class="form-control" />
+    <label>Id Descuento</label>
+    <input type="text" name="iddescuento" value="@Model.IdDescuento" class="form-control" />
+    <label>Imagen</label>
+    <input type="text" name="imagen" value="@Model.Imagen" class="form-control" />
+    <button class="btn btn-info">Update</button>
+</form>

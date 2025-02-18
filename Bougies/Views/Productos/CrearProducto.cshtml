@@ -39,9 +39,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdDescuento" class="control-label"></label>
-                <input asp-for="IdDescuento" class="form-control" />
+                <select asp-for="IdDescuento" class="form-control">
+                    <option value="">Seleccione un descuento</option>
+                    @foreach (var descuento in ViewBag.Descuentos as SelectList)
+                    {
+                        <option value="@descuento.Value">@descuento.Text</option>
+                    }
+                </select>
                 <span asp-validation-for="IdDescuento" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Imagen" class="control-label"></label>
                 <input asp-for="Imagen" class="form-control" />
