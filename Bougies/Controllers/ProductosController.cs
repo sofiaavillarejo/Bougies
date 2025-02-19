@@ -31,7 +31,7 @@ namespace Bougies.Controllers
         [HttpPost]
         public async Task<IActionResult> CrearProducto(Producto prod)
         {
-            await this.repo.CreateProducto(prod.Nombre, prod.Descripcion, prod.Precio, prod.Stock, prod.IdCategoria, prod.IdDescuento ?? 0, prod.Imagen); //me aseguro que el iddescuento puede ser null
+            await this.repo.CreateProducto(prod.Nombre, prod.Descripcion, prod.Precio, prod.Stock, prod.IdCategoria, prod.IdDescuento, prod.Imagen); //me aseguro que el iddescuento puede ser null
             return RedirectToAction("Index");
         }
 
@@ -43,7 +43,7 @@ namespace Bougies.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProducto(Producto prod)
         {
-            await this.repo.UpdateProducto(prod.Id, prod.Nombre, prod.Descripcion, prod.Precio, prod.Stock, prod.IdCategoria, prod.IdDescuento ?? 0, prod.Imagen);
+            await this.repo.UpdateProducto(prod.Id, prod.Nombre, prod.Descripcion, prod.Precio, prod.Stock, prod.IdCategoria, prod.IdDescuento, prod.Imagen);
             return RedirectToAction("Index");
         }
 

@@ -20,7 +20,7 @@ namespace Bougies.Models
         [Column("IdCategoria")]
         public int IdCategoria { get; set; }
         [Column("IdDescuento")]
-        public int? IdDescuento { get; set; }
+        public int IdDescuento { get; set; }
         [Column("Imagen")]
         public string Imagen { get; set; }
     }

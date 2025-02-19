@@ -36,7 +36,7 @@ namespace Bougies.Repositories
                 Precio = precio,
                 Stock = stock,
                 IdCategoria = idCategoria,
-                IdDescuento = idDescuento != 0 ? (int?)idDescuento : null,
+                IdDescuento = idDescuento,
                 Imagen = imagen
             };
 
@@ -49,7 +49,7 @@ namespace Bougies.Repositories
             return await consulta.FirstOrDefaultAsync();
         }
 
-        public async Task UpdateProducto(int id, string nombre, string descripcion, decimal precio, int stock, int idCategoria, int? idDescuento, string imagen)
+        public async Task UpdateProducto(int id, string nombre, string descripcion, decimal precio, int stock, int idCategoria, int idDescuento, string imagen)
         {
             Producto prod = await this.FindProducto(id);
 
@@ -60,7 +60,7 @@ namespace Bougies.Repositories
                 prod.Precio = precio;
                 prod.Stock = stock;
                 prod.IdCategoria = idCategoria;
-                prod.IdDescuento = idDescuento ?? 1;
+                prod.IdDescuento = idDescuento;
                 prod.Imagen = imagen;
 
                 await this.context.SaveChangesAsync();
