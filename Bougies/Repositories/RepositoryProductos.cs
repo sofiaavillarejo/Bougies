@@ -74,7 +74,11 @@ namespace Bougies.Repositories
             return await consulta.ToListAsync();
         }
 
-
-
+        public async Task DeleteProducto(int id)
+        {
+            Producto prod = await this.FindProducto(id);
+            this.context.Producto.Remove(prod);
+            await this.context.SaveChangesAsync();
+        }
     }
 }

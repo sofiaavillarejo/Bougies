@@ -63,7 +63,6 @@ namespace Bougies.Controllers
             return RedirectToAction("Index");
         }
 
-
         public async Task<IActionResult> UpdateProducto(int id)
         {
             var producto = await this.repo.FindProducto(id);
@@ -73,6 +72,11 @@ namespace Bougies.Controllers
         public async Task<IActionResult> UpdateProducto(Producto prod)
         {
             await this.repo.UpdateProducto(prod.Id, prod.Nombre, prod.Descripcion, prod.Precio, prod.Stock, prod.IdCategoria, prod.IdDescuento, prod.Imagen);
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.repo.DeleteProducto(id);
             return RedirectToAction("Index");
         }
 
