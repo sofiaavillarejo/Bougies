@@ -80,5 +80,12 @@ namespace Bougies.Repositories
             this.context.Producto.Remove(prod);
             await this.context.SaveChangesAsync();
         }
+
+        //METODO PARA COGER LOS ROLES QUE HAY E IMPLANTARLO EN LOS MENUS DE PLANTILLAS
+        public async Task<List<Roles>> GetRolesAsync()
+        {
+            var consulta = from datos in this.context.Roles select datos;
+            return await consulta.ToListAsync();
+        }
     }
 }

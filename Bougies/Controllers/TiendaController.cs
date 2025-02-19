@@ -1,21 +1,24 @@
 using System.Diagnostics;
 using Bougies.Models;
+using Bougies.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bougies.Controllers
 {
-    public class HomeController : Controller
+    public class TiendaController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ILogger<TiendaController> _logger;
+        private IRepositoryProductos repo;
+        public TiendaController(ILogger<TiendaController> logger, IRepositoryProductos repo)
         {
             _logger = logger;
+            this.repo = repo;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Producto> productos = await this.repo.GetProductosAsync();
+            return View(productos);
         }
 
         public IActionResult Privacy()
@@ -27,6 +30,11 @@ namespace Bougies.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Carrito()
+        {
+            return View();
         }
     }
 }
