@@ -24,6 +24,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+//para las imagenes estaticas
+app.UseStaticFiles();
+
 app.UseAuthorization();
 
 app.MapStaticAssets();

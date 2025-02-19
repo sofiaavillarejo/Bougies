@@ -29,11 +29,40 @@ namespace Bougies.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CrearProducto(Producto prod)
+        public async Task<IActionResult> CrearProducto(Producto prod, IFormFile imagen)
         {
-            await this.repo.CreateProducto(prod.Nombre, prod.Descripcion, prod.Precio, prod.Stock, prod.IdCategoria, prod.IdDescuento, prod.Imagen); //me aseguro que el iddescuento puede ser null
+            if (imagen != null && imagen.Length > 0)
+            {
+                // Generar un nombre único para la imagen
+                var fileName = Path.GetFileName(imagen.FileName);
+
+                // Generar la ruta completa para guardar la imagen en wwwroot/imagenes/
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+                // Verificar si la carpeta de imágenes existe, si no existe, crearla
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                var filePath = Path.Combine(directoryPath, fileName);
+
+                // Guardar la imagen en el servidor
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imagen.CopyToAsync(stream);
+                }
+
+                // Asignar solo el nombre de la imagen al producto
+                prod.Imagen = fileName;
+            }
+
+            // Guarda el producto en la base de datos
+            await this.repo.CreateProducto(prod.Nombre, prod.Descripcion, prod.Precio, prod.Stock, prod.IdCategoria, prod.IdDescuento, prod.Imagen);
+
             return RedirectToAction("Index");
         }
+
 
         public async Task<IActionResult> UpdateProducto(int id)
         {
