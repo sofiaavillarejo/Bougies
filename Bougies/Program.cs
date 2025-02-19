@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 string connectionString = builder.Configuration.GetConnectionString("Bougies");
 builder.Services.AddDbContext<BougiesContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddTransient<IRepositoryProductos, RepositoryProductos>();
+builder.Services.AddTransient<IRepositoryAdmin, RepositoryAdmin>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -12,11 +12,11 @@ using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace Bougies.Repositories
 {
-    public class RepositoryProductos: IRepositoryProductos
+    public class RepositoryAdmin: IRepositoryAdmin
     {
         private BougiesContext context;
 
-        public RepositoryProductos(BougiesContext context)
+        public RepositoryAdmin(BougiesContext context)
         {
             this.context = context;
         }

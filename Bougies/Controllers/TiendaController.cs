@@ -8,8 +8,8 @@ namespace Bougies.Controllers
     public class TiendaController : Controller
     {
         private readonly ILogger<TiendaController> _logger;
-        private IRepositoryProductos repo;
-        public TiendaController(ILogger<TiendaController> logger, IRepositoryProductos repo)
+        private IRepositoryAdmin repo;
+        public TiendaController(ILogger<TiendaController> logger, IRepositoryAdmin repo)
         {
             _logger = logger;
             this.repo = repo;

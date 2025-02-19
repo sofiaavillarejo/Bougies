@@ -2,7 +2,7 @@
 
 namespace Bougies.Repositories
 {
-    public interface IRepositoryProductos
+    public interface IRepositoryAdmin
     {
         Task<List<Producto>> GetProductosAsync();
         Task CreateProducto(string nombre, string descripcion, decimal precio, int stock, int idCategoria, int idDescuento, string imagen);

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Bougies.Controllers
 {
-    public class ProductosController : Controller
+    public class AdminController : Controller
     {
-        private IRepositoryProductos repo;
-        public ProductosController(IRepositoryProductos repo)
+        private IRepositoryAdmin repo;
+        public AdminController(IRepositoryAdmin repo)
         {
             this.repo = repo;
         }
