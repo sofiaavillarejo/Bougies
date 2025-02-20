@@ -36,5 +36,13 @@ namespace Bougies.Controllers
         {
             return View();
         }
+
+        public IActionResult TestSession()
+        {
+            HttpContext.Session.SetString("Usuario", "Admin");
+            string usuario = HttpContext.Session.GetString("Usuario");
+            return Content($"Usuario en sesión: {usuario}");
+        }
+
     }
 }

@@ -67,9 +67,14 @@
                 @Html.DisplayFor(modelItem => item.Imagen)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-controller="Carrito" asp-action="AddProductCarrito"
+                       asp-route-id="@item.Id"
+                       asp-route-nombre="@item.Nombre"
+                       asp-route-precio="@item.Precio"
+                       asp-route-imagen="@item.Imagen"
+                       class="btn btn-success">
+                        Añadir al carrito
+                    </a>
             </td>
         </tr>
 }

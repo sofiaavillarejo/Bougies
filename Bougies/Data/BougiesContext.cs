@@ -9,5 +9,6 @@ namespace Bougies.Data
         public DbSet<Producto> Producto { get; set; }
         public DbSet<Descuento> Descuento { get; set; }
         public DbSet<Roles> Roles { get; set; }
+        
     }
 }

@@ -28,6 +28,7 @@ namespace Bougies.Controllers
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> CrearProducto(Producto prod, IFormFile imagen)
         {
@@ -68,6 +69,7 @@ namespace Bougies.Controllers
             var producto = await this.repo.FindProducto(id);
             return View(producto);
         }
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> UpdateProducto(Producto prod)
         {
