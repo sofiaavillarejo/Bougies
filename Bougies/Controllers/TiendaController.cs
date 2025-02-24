@@ -21,9 +21,10 @@ namespace Bougies.Controllers
             return View(productos);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Productos()
         {
-            return View();
+            List<Producto> productos = await this.repo.GetProductosAsync();
+            return View(productos);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

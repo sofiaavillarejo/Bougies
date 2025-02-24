@@ -11,7 +11,7 @@ namespace Bougies.Models
         [Column("Nombre")]
         public string Nombre { get; set; }
         [Column("Valor")]
-        public decimal Valor { get; set; }
+        public int Valor { get; set; }
         [Column("Activo")]
         public bool Activo { get; set; }
     }

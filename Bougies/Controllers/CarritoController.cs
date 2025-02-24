@@ -32,7 +32,9 @@ namespace Bougies.Controllers
 
             //comprobar si el prod ya esta en el carrito
             var item = carrito.FirstOrDefault(p => p.IdProducto == id);
-
+            List<Descuento> descuentos = await this.repo.GetDescuentosAsync();
+            int idDescuento = descuentos.FirstOrDefault(d => d.Id == prod.IdDescuento).Id;
+            int descuento = descuentos.FirstOrDefault(d => d.Id == prod.IdDescuento).Valor;
             if (item != null)
             {
                 item.Cantidad++;
@@ -42,6 +44,8 @@ namespace Bougies.Controllers
                 carrito.Add(new Carrito
                 {
                     IdProducto = prod.Id,
+                    IdDescuento = idDescuento, 
+                    Descuento = descuento,
                     Nombre = prod.Nombre,
                     Precio = prod.Precio,
                     Cantidad = 1,
@@ -55,7 +59,7 @@ namespace Bougies.Controllers
             return RedirectToAction("Index", "Carrito");
         }
 
-
+        //CAMBIAR ESTO A REPOSITORY
         private List<Carrito> ObtenerCarrito()
         {
             string carritoSession = HttpContext.Session.GetString(SessionKeyCarrito);

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Bougies.Models.Producto>
+
+@{
+    ViewData["Title"] = "Productos";
+}
+<link rel="stylesheet" href="/css/productos.css" type="text/css">
+<h1 class="text-center">Nuestra Colección</h1>
+
+<div class="product-container">
+    @foreach (var item in Model)
+    {
+        <div class="product-card">
+            <img src="@Url.Content("~/images/" + item.Imagen)" alt="Imagen Producto" style="width:100px; height:auto;" />
+            <div class="product-info">
+                <h3 class="product-title">@item.Nombre</h3>
+                <p class="product-description">@item.Descripcion</p>
+                <span class="product-price">$@item.Precio</span>
+                <button class="product-stock">Stock: @item.Stock</button>
+                <a asp-controller="Carrito" asp-action="AddProductCarrito"
+                   asp-route-id="@item.Id"
+                   asp-route-nombre="@item.Nombre"
+                   asp-route-precio="@item.Precio"
+                   asp-route-imagen="@item.Imagen"
+                   class="product-button">
+                    Añadir al carrito
+                </a>
+            </div>
+        </div>
+    }
+</div>

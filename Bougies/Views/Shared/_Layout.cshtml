@@ -8,48 +8,136 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Bougies.styles.css" asp-append-version="true" />
+      <link rel="stylesheet" href="https://r.mobirisesite.com/1225067/assets/web/assets/mobirise-icons2/mobirise2.css?rnd=1740137554309">
+  <link rel="stylesheet" href="https://r.mobirisesite.com/1225067/assets/bootstrap/css/bootstrap.min.css?rnd=1740137554309">
+  <link rel="stylesheet" href="https://r.mobirisesite.com/1225067/assets/bootstrap/css/bootstrap-grid.min.css?rnd=1740137554309">
+  <link rel="stylesheet" href="https://r.mobirisesite.com/1225067/assets/bootstrap/css/bootstrap-reboot.min.css?rnd=1740137554309">
+  <link rel="stylesheet" href="https://r.mobirisesite.com/1225067/assets/parallax/jarallax.css?rnd=1740137554309">
+      <link rel="stylesheet" href="https://r.mobirisesite.com/1225067/assets/socicon/css/styles.css?rnd=1740137554309">
+  @* <link rel="stylesheet" href="https://r.mobirisesite.com/1225067/assets/theme/css/style.css?rnd=1740137554309"> *@
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap&display=swap"></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap&display=swap"></noscript>
+  @* <link rel="stylesheet" href="https://r.mobirisesite.com/1225067/assets/css/mbr-additional.css?rnd=1740137554309" type="text/css"> *@
+    <link rel="stylesheet" href="/css/additional.css" type="text/css">
+
+<style>
+.navbar-fixed-top {
+  top: auto;
+}
+#mobirisePromo.container-banner {
+  height: 11rem;
+  opacity: 1;
+  -webkit-animation: 11s linear animationHeight;
+  -moz-animation: 11s linear animationHeight;
+    -o-animation: 11s linear animationHeight;
+       animation: 11s linear animationHeight;
+       transition: all  0.5s;
+}
+#mobirisePromo.container-banner.container-banner-closing {
+  pointer-events: none;
+  height: 0;
+  opacity: 0;
+  -webkit-animation: 0.5s linear animationClosing;
+  -moz-animation:  0.5s linear animationClosing;
+    -o-animation:  0.5s linear animationClosing;
+       animation:  0.5s linear animationClosing;
+}
+#mobirisePromo .banner {
+  min-height: 11rem;
+  position:fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 10px;
+  opacity:1;
+  -webkit-animation: 11s linear animationBanner;
+  -moz-animation: 11s linear animationBanner;
+    -o-animation: 11s linear animationBanner;
+       animation: 11s linear animationBanner;
+  z-index: 1031;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#mobirisePromo .banner p {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  animation: none;
+  visibility: visible;
+}
+#mobirisePromo .buy-license {
+  text-decoration: underline;
+}
+#mobirisePromo .banner .btn {
+  margin: 0.3rem 0.5rem;
+  animation: none;
+  visibility: visible;
+}
+.navbar.opened {
+    z-index: 1032;
+}
+#mobirisePromo .mbr-section-abuse-report {
+  margin-top: 0.8rem;
+  font-size: 80%;
+}
+#mobirisePromo .mbr-section-abuse-report a {
+  color: #aaa;
+}
+</style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Tienda" asp-action="Index">Bougies</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Productos</a>
-                        </li>
-                    </ul>
+
+    <div>
+        <main role="main">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Productos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" >Sobre nosotros</a>
+                            </li>
+                    <a class="navbar-brand" asp-area="" asp-controller="Tienda" asp-action="Index">Bougies</a>
+                        </ul>
+                    </div>
+                    <div class="d-flex">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"> <i class="fa-regular fa-user"></i></a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Carrito" asp-action="Index"><i class="fa-solid fa-cart-shopping"></i></a>
+                    </div>
                 </div>
-                <div class="d-flex">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"> <i class="fa-regular fa-user"></i></a>
-                   
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Carrito" asp-action="Index"><i class="fa-solid fa-cart-shopping"></i></a>
-                    
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+            </nav>
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Bougies - <a asp-area="" asp-controller="Tienda" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="https://kit.fontawesome.com/6f5f758826.js" crossorigin="anonymous"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/web/assets/jquery/jquery.min.js?rnd=1740137554309"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/bootstrap/js/bootstrap.bundle.min.js?rnd=1740137554309"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/parallax/jarallax.js?rnd=1740137554309"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/smoothscroll/smooth-scroll.js?rnd=1740137554309"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/ytplayer/index.js?rnd=1740137554309"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/dropdown/js/navbar-dropdown.js?rnd=1740137554309"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/embla/embla.min.js?rnd=1740137554309"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/embla/script.js?rnd=1740137554309"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/mbr-switch-arrow/mbr-switch-arrow.js?rnd=1740137554309"></script>
+    <script src="https://r.mobirisesite.com/1225067/assets/theme/js/script.js?rnd=1740137554309"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+
 </body>
 </html>
