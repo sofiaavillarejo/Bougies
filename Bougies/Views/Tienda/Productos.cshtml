@@ -4,27 +4,26 @@
     ViewData["Title"] = "Productos";
 }
 <link rel="stylesheet" href="/css/productos.css" type="text/css">
-<h1 class="text-center">Nuestra Colección</h1>
+<h1 class="text-center display-5">Velas</h1>
 
 <div class="product-container">
     @foreach (var item in Model)
     {
-        <div class="product-card">
-            <img src="@Url.Content("~/images/" + item.Imagen)" alt="Imagen Producto" style="width:100px; height:auto;" />
-            <div class="product-info">
+        <a style="text-decoration: none;" asp-controller="Tienda" asp-action="DetalleProducto" asp-route-idproducto="@item.Id">
+            <div class="product-item">
+                <img src="@Url.Content("~/images/" + item.Imagen)" alt="Imagen Producto" class="product-image" />
                 <h3 class="product-title">@item.Nombre</h3>
                 <p class="product-description">@item.Descripcion</p>
-                <span class="product-price">$@item.Precio</span>
-                <button class="product-stock">Stock: @item.Stock</button>
-                <a asp-controller="Carrito" asp-action="AddProductCarrito"
+                <span class="product-price">@item.Precio€</span>
+                <button asp-controller="Carrito" asp-action="AddProductCarrito"
                    asp-route-id="@item.Id"
                    asp-route-nombre="@item.Nombre"
                    asp-route-precio="@item.Precio"
                    asp-route-imagen="@item.Imagen"
-                   class="product-button">
-                    Añadir al carrito
-                </a>
+                   class="product-button" style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fa-solid fa-cart-shopping"></i>Añadir al carrito
+                </button>
             </div>
-        </div>
+        </a>
     }
 </div>

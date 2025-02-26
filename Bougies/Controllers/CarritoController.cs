@@ -59,7 +59,6 @@ namespace Bougies.Controllers
             return RedirectToAction("Index", "Carrito");
         }
 
-        //CAMBIAR ESTO A REPOSITORY
         private List<Carrito> ObtenerCarrito()
         {
             string carritoSession = HttpContext.Session.GetString(SessionKeyCarrito);
@@ -68,7 +67,6 @@ namespace Bougies.Controllers
         private void GuardarCarrito(List<Carrito> carrito)
         {
             HttpContext.Session.SetString(SessionKeyCarrito, JsonConvert.SerializeObject(carrito));
-
         }
     }
 }

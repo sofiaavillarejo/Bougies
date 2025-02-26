@@ -697,11 +697,6 @@ a[class*="text-"]:not(.nav-link):not(.dropdown-item):not([role]):not(.navbar-cap
     border-radius: 100px !important;
 }
 
-a,
-a:hover {
-    color: #000000;
-}
-
 .mbr-plan-header.bg-primary .mbr-plan-subtitle,
 .mbr-plan-header.bg-primary .mbr-plan-price-desc {
     color: #b3b3b3;
@@ -1893,7 +1888,7 @@ img {
 }
 
 .cid-u6kyDEioZ3 .content-wrapper {
-    padding: 100px 0 100px 60px;
+    padding: 40px 0 60px 40px;
     background-color: #f4f1f1;
     border-radius: 20px;
     display: flex;

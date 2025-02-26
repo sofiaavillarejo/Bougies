@@ -66,6 +66,7 @@ namespace Bougies.Controllers
 
         public async Task<IActionResult> UpdateProducto(int id)
         {
+            //CAMBIAR POR EL MODEL PRODUCTO
             var producto = await this.repo.FindProducto(id);
             return View(producto);
         }

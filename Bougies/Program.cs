@@ -12,6 +12,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true; // Solo accesible por HTTP
     options.Cookie.IsEssential = true; // Necesario para el funcionamiento de la app
 });
+
 string connectionString = builder.Configuration.GetConnectionString("Bougies");
 builder.Services.AddDbContext<BougiesContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddTransient<IRepositoryAdmin, RepositoryAdmin>();

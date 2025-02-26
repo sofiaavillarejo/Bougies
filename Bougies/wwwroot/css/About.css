@@ -11,8 +11,8 @@
 
 .aboutUs-text {
     font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 1.36rem;
     line-height: 1.4;
+    text-align: justify;
 }
 
     .aboutUs-text > .mbr-iconfont {
@@ -246,13 +246,13 @@ img {
 
 @media (max-width: 1700px) {
     .cid-u5M4nagYK0 .content-wrapper .text-wrapper {
-        margin: 50px 116px 0 116px;
+        margin: 20px 116px 0 116px;
     }
 }
 
 @media (max-width: 1440px) {
     .cid-u5M4nagYK0 .content-wrapper .text-wrapper {
-        margin: 110px 0 0;
+        margin: 20px 0 0;
     }
 }
 
@@ -275,7 +275,7 @@ img {
         bottom: 0;
         left: 0;
         height: 1px;
-        width: 60%;
+        width: 100%;
         background-color: #1e1d1c;
         opacity: .2;
     }

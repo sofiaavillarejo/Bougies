@@ -1,0 +1,29 @@
+﻿@model Producto
+
+<link rel="stylesheet" href="/css/detalleProducto.css" type="text/css">
+<link rel="stylesheet" href="/css/About.css" type="text/css">
+
+<div class="container">
+	<div class="row">
+		<!-- Columna de la imagen -->
+		<div class="col-md-5 text-start">
+			<img src="@Url.Content("~/images/" + @Model.Imagen)" alt="Imagen Producto" class="product-image img-fluid" />
+		</div>
+
+		<!-- Columna del texto -->
+		<div class="col-md-7">
+			<h1 class="display-5" style="font-size:5rem;">@Model.Nombre</h1>
+			<h4>@Model.Precio €</h4>
+			<p class="description">@Model.Descripcion</p>
+			<div class="buttonsCantidad">
+				<label for="quantity" class="quantity-label">Cantidad:</label>
+				<div class="addQuantity">
+					<button class="btnQuantity">-</button>
+					<input type="text" id="quantity" name="quantity" value="1" min="1" class="quantity-input">
+					<button class="btnQuantity">+</button>
+				</div>
+				<button style="display: flex; align-items: center; gap: 5px; border-radius: 5rem;justify-content: center;" type="submit" class="addButton"><i class="fa-solid fa-cart-shopping"></i>Añadir al carrito</button>
+			</div>
+		</div>
+	</div>
+</div>

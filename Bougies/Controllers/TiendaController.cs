@@ -38,12 +38,9 @@ namespace Bougies.Controllers
             return View();
         }
 
-        public IActionResult TestSession()
-        {
-            HttpContext.Session.SetString("Usuario", "Admin");
-            string usuario = HttpContext.Session.GetString("Usuario");
-            return Content($"Usuario en sesión: {usuario}");
+        public async Task<IActionResult> DetalleProducto(int idProducto) {
+            Producto prod = await this.repo.FindProducto(idProducto);
+            return View(prod);
         }
-
     }
 }
