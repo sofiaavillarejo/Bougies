@@ -33,10 +33,10 @@ namespace Bougies.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Carrito()
-        {
-            return View();
-        }
+        //public IActionResult Carrito()
+        //{
+        //    return View();
+        //}
 
         public async Task<IActionResult> DetalleProducto(int idProducto) {
             Producto prod = await this.repo.FindProducto(idProducto);

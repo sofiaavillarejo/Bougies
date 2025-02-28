@@ -9,21 +9,23 @@
 <div class="product-container">
     @foreach (var item in Model)
     {
-        <a style="text-decoration: none;" asp-controller="Tienda" asp-action="DetalleProducto" asp-route-idproducto="@item.Id">
-            <div class="product-item">
+        <div class="product-item">
+            <a asp-controller="Tienda" asp-action="DetalleProducto" asp-route-idproducto="@item.Id" style="text-decoration: none; display: block;">
                 <img src="@Url.Content("~/images/" + item.Imagen)" alt="Imagen Producto" class="product-image" />
                 <h3 class="product-title">@item.Nombre</h3>
                 <p class="product-description">@item.Descripcion</p>
                 <span class="product-price">@item.Precio€</span>
-                <button asp-controller="Carrito" asp-action="AddProductCarrito"
-                   asp-route-id="@item.Id"
-                   asp-route-nombre="@item.Nombre"
-                   asp-route-precio="@item.Precio"
-                   asp-route-imagen="@item.Imagen"
-                   class="product-button" style="display: flex; align-items: center; gap: 5px;">
-                    <i class="fa-solid fa-cart-shopping"></i>Añadir al carrito
-                </button>
-            </div>
-        </a>
+            </a>
+            <a asp-controller="Carrito" asp-action="AddProductCarrito"
+               asp-route-id="@item.Id"
+               asp-route-nombre="@item.Nombre"
+               asp-route-precio="@item.Precio"
+               asp-route-imagen="@item.Imagen"
+               class="product-button"
+               style="display: flex; align-items: center; gap: 5px; text-decoration: none; color: white; border-radius: 5rem">
+                <i class="fa-solid fa-cart-shopping"></i>Añadir al carrito
+            </a>
+        </div>
+
     }
 </div>

@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Newtonsoft.Json;
+
+@{
+    List<Carrito> carrito = Context.Session.GetString("Carrito") != null
+        ? JsonConvert.DeserializeObject<List<Carrito>>(Context.Session.GetString("Carrito"))
+        : new List<Carrito>();
+
+    int cantidadProductos = carrito.Sum(c => c.Cantidad);
+}
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -88,13 +100,22 @@
 #mobirisePromo .mbr-section-abuse-report a {
   color: #aaa;
 }
+
+.nav.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 </style>
 </head>
 <body>
 
     <div>
         <main role="main">
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm sticky-top">
                 <div class="container-fluid">
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -113,7 +134,7 @@
                     </div>
                     <div class="d-flex">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"> <i class="fa-regular fa-user"></i></a>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Carrito" asp-action="Index"><i class="fa-solid fa-cart-shopping"></i></a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Carrito" asp-action="Index"><i class="fa-solid fa-cart-shopping"></i>(@cantidadProductos)</a>
                     </div>
                 </div>
             </nav>

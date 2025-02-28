@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="/css/detalleProducto.css" type="text/css">
 <link rel="stylesheet" href="/css/About.css" type="text/css">
 
+
 <div class="container">
 	<div class="row">
 		<!-- Columna de la imagen -->
@@ -22,7 +23,13 @@
 					<input type="text" id="quantity" name="quantity" value="1" min="1" class="quantity-input">
 					<button class="btnQuantity">+</button>
 				</div>
-				<button style="display: flex; align-items: center; gap: 5px; border-radius: 5rem;justify-content: center;" type="submit" class="addButton"><i class="fa-solid fa-cart-shopping"></i>Añadir al carrito</button>
+				<a asp-controller="Carrito" asp-action="AddProductCarrito"
+				   asp-route-id="@Model.Id"
+				   asp-route-nombre="@Model.Nombre"
+				   asp-route-precio="@Model.Precio"
+				   asp-route-imagen="@Model.Imagen" class="product-button" style="color: white;">
+					<i class="fa-solid fa-cart-shopping"></i>Añadir al carrito
+				</a>
 			</div>
 		</div>
 	</div>
