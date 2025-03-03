@@ -2,6 +2,7 @@
 using Bougies.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Bougies.Extensions;
 
 namespace Bougies.Controllers
 {
@@ -30,11 +31,13 @@ namespace Bougies.Controllers
 
             List<Carrito> carrito = ObtenerCarrito();
 
-            //comprobar si el prod ya esta en el carrito
-            var item = carrito.FirstOrDefault(p => p.IdProducto == id);
+            //obtener descuentos
             List<Descuento> descuentos = await this.repo.GetDescuentosAsync();
             int idDescuento = descuentos.FirstOrDefault(d => d.Id == prod.IdDescuento).Id;
             int descuento = descuentos.FirstOrDefault(d => d.Id == prod.IdDescuento).Valor;
+
+            //comprobar si el producto ya esta en el carrito
+            var item = carrito.FirstOrDefault(p => p.IdProducto == id);
             if (item != null)
             {
                 item.Cantidad++;
@@ -53,7 +56,7 @@ namespace Bougies.Controllers
                 });
             }
 
-            // 🔹 Guardar el carrito actualizado en la sesión
+            // Guardar el carrito actualizado
             GuardarCarrito(carrito);
 
             return RedirectToAction("Index", "Carrito");
@@ -61,12 +64,11 @@ namespace Bougies.Controllers
 
         private List<Carrito> ObtenerCarrito()
         {
-            string carritoSession = HttpContext.Session.GetString(SessionKeyCarrito);
-            return carritoSession != null ? JsonConvert.DeserializeObject<List<Carrito>>(carritoSession) : new List<Carrito>();
+            return HttpContext.Session.GetObject<List<Carrito>>(SessionKeyCarrito) ?? new List<Carrito>();
         }
         private void GuardarCarrito(List<Carrito> carrito)
         {
-            HttpContext.Session.SetString(SessionKeyCarrito, JsonConvert.SerializeObject(carrito));
+            HttpContext.Session.SetObject(SessionKeyCarrito, carrito);
         }
     }
 }
