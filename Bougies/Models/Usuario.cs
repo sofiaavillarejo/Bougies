@@ -7,7 +7,7 @@ namespace Bougies.Models
     public class Usuario
     {
         [Key]
-        [Column("ID")]
+        [Column("Id")]
         public int IdUsuario { get; set; }
 
         [Column("Nombre")]

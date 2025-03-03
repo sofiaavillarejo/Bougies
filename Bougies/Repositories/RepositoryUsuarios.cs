@@ -1,5 +1,6 @@
 ﻿using Bougies.Data;
 using Bougies.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bougies.Repositories
@@ -83,6 +84,25 @@ namespace Bougies.Repositories
             }
 
             return true;
+        }
+
+        //LOGIN------------------
+        public async Task<Usuario> LoginUser(string email, string passwd)
+        {
+            var user = await this.context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(passwd, user.Passwd);
+
+            if (isPasswordCorrect)
+            {
+                return user;
+            }
+
+            return null;
         }
     }
 }

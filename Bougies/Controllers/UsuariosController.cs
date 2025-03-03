@@ -24,5 +24,33 @@ namespace Bougies.Controllers
             await this.repo.RegistrarUser(nombre, email, passwd);
             return RedirectToAction("Login");
         }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string passwd)
+        {
+           Usuario user = await this.repo.LoginUser(email, passwd);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(passwd, user.Passwd))
+            {
+                ViewData["Error"] = "Email o contraseña incorrectos";
+                return View();
+            }
+
+            HttpContext.Session.SetString("userEmail", user.Email);
+            HttpContext.Session.SetString("userName", user.Nombre);
+
+            return RedirectToAction("Productos", "Tienda");
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+        }
     }
 }

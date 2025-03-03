@@ -1,12 +1,13 @@
 ﻿@using Newtonsoft.Json;
 @using Bougies.Extensions;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
 	List<Carrito> carrito = Context.Session.GetObject<List<Carrito>>("Carrito") ?? new List<Carrito>();
 	int cantidadProductos = carrito.Sum(c => c.Cantidad);
+
+	var user = HttpContextAccessor.HttpContext.Session.GetString("userName");
 }
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -119,7 +120,6 @@
 	</style>
 </head>
 <body>
-
 	<div>
 		<main role="main">
 			<nav class="navbar navbar-expand-sm navbar-toggleable-sm sticky-top">
@@ -139,11 +139,18 @@
 							<li class="nav-item">
 								<a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Registro">Registrarse</a>
 							</li>
-							<a class="navbar-brand" asp-area="" asp-controller="Tienda" asp-action="Index">Bougies</a>
+							<a class="navbar-brand" asp-area="" asp-controller="Tienda" asp-action="Index">Bougies @user</a>
 						</ul>
 					</div>
 					<div class="d-flex">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"> <i class="fa-regular fa-user"></i></a>
+						@if (user != null){
+							<span>Hola, @user</span>
+							<a asp-controller="Usuarios" asp-action="Logout">Cerrar sesión</a>
+						}else{
+							<a asp-controller="Usuarios" asp-action="Login">Iniciar sesión</a>
+							<span>@user</span>
+						}
+						@* <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"> <i class="fa-regular fa-user"></i></a> *@
 						<a class="nav-link text-dark" asp-area="" asp-controller="Carrito" asp-action="Index"><i class="fa-solid fa-cart-shopping"></i>(@cantidadProductos)</a>
 					</div>
 				</div>

@@ -191,6 +191,12 @@
 	</div>
 </section>
 
+<ul>
+	@foreach (var key in Context.Session.Keys)
+	{
+		<li>@key: @Context.Session.GetString(key)</li>
+	}
+</ul>
 @* columnas 3 fotos 
 <section data-bs-version="5.1" class="gallery01 printm5 cid-u6kyALsrkp mbr-fullscreen p-3" id="gallery01-9">
     <div class="container-fluid">
