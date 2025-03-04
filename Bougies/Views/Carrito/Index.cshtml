@@ -1,73 +1,159 @@
 ﻿@model List<Bougies.Models.Carrito>
+@using Bougies.Extensions;
 
-<h2>Carrito de Compras</h2>
+@{
+	var totalConDescuento = Context.Session.GetDecimal("TotalConDescuento");
+	var descuento = Context.Session.GetDecimal("DescuentoTotal");
 
-@if (Model.Count == 0)
-{
-    <p>Tu carrito está vacío.</p>
 }
-else
-{
-    <h1>Mi bolsa(@Model.Sum(item => item.Cantidad))</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Descuento</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td><img src="@Url.Content("~/images/" + item.Imagen)" width="50"></td>
-                    <td>@item.Nombre</td>
-                    <td>@item.Precio</td>
-                    <td>@item.Cantidad</td>
-                    @if (item.IdDescuento != 1)
-                    {
-                        <td>
-                            @{
-                                decimal descuento = item.Precio * (item.Descuento / 100m);
-                            }
-                            @descuento.ToString("0.00") €
-                        </td>
+<link rel="stylesheet" href="/css/carrito.css" type="text/css">
+<div class="container">
+	<h2>Carrito de Compras</h2>
 
-                    }else {
-                        <td>-</td>
-                    }
-                    
-                    @if (item.IdDescuento != 1)
-                    {
-                        <td>
-                            @{
-                                decimal precioFinal = (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad;
-                            }
-                            @precioFinal.ToString("C") <!-- Formateado en moneda -->
-                        </td>
-                    }
-                    else
-                    {
-                        <td>@(item.Precio * item.Cantidad) €</td> <!-- Si no hay descuento, mantiene el precio original -->
-                    }
-                    @* <td> *@
-                    @*     <a asp-action="EliminarDelCarrito" asp-route-id="@item.IdProducto" class="btn btn-danger">Eliminar</a> *@
-                    @* </td> *@
-                </tr>
-            }
-        </tbody>
-    </table>
+	@* mensajes cupon descuento *@
+	@if (TempData["Success"] != null)
+	{
+		<div class="alert alert-success">
+			@TempData["Success"]
+		</div>
+	}
 
-    <h2>
-        Total del carrito:
-        @{
-            decimal totalCarrito = Model.Sum(item => (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad);
-        }
-        @totalCarrito.ToString("C") <!-- Formateado en moneda -->
-    </h2>
-}
-<a asp-controller="Tienda" asp-action="Productos" class="btn btn-primary">Seguir comprando</a>
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert alert-danger">
+			@TempData["Error"]
+		</div>
+	}
+
+	@if (Model.Count == 0)
+	{
+		<p>Tu carrito está vacío.</p>
+	}
+	else
+	{
+		<h1>Mi bolsa (@Model.Sum(item => item.Cantidad))</h1>
+		<div class="row">
+			<div class="col-7">
+				<div class="productDetails">
+					@foreach (var item in Model)
+					{
+						<div class="product-image">
+							<img src="@Url.Content("~/images/" + item.Imagen)" width="50">
+						</div>
+						<div class="product-info">
+							<span>@item.Nombre</span>
+							<span>@item.Precio</span>
+							<div class="product-quantity">
+								<form method="post" asp-action="ActualizarCantidad" asp-controller="Carrito" id="form-@item.IdProducto">
+									<input type="hidden" name="idProducto" value="@item.IdProducto" />
+									<input type="hidden" name="accion" id="accion-@item.IdProducto" />
+
+									<div class="addQuantity">
+										<button type="button" class="btnQuantity" onclick="cambiarCantidad(@item.IdProducto, 'restar', @item.Cantidad)">-</button>
+										<input type="text" value="@item.Cantidad" class="quantity-input" readonly />
+										<button type="button" class="btnQuantity" onclick="cambiarCantidad(@item.IdProducto, 'sumar')">+</button>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="product-totalPrice">
+							@if (item.Descuento > 0)
+							{
+								<span>@((item.Precio * (item.Descuento / 100m)).ToString("0.00")) €</span>
+								<span>@(((item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad).ToString("C"))</span>
+							}
+							else
+							{
+								<span>Total: @(item.Precio * item.Cantidad) €</span>
+							}
+						</div>
+
+					}
+				</div>
+			</div>
+			<div class="col-5">
+				<div class="resume">
+					<div class="discount">
+						<span>¿Tienes un cupón?</span>
+						<div class="cupon-container">
+							<form method="post" asp-action="AplicarCupon" asp-controller="Carrito">
+								<input type="text" name="cupon" placeholder="Introduce el código" />
+								<button type="submit">Aplicar cupón</button>
+							</form>
+						</div>
+					</div>
+					<hr />
+					<div class="subtotal">
+						<span>Subtotal</span>
+						@* Si el descuento se ha aplicado, mostrar el total con descuento *@
+						@if (totalConDescuento != 0)
+						{
+							<span>@totalConDescuento</span>
+						}
+						else
+						{
+							<span>@Model.Sum(item => (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad).ToString("C")</span>
+						}
+					</div>
+
+					<hr />
+					<div class="gastosEnvio">
+						<span>Gastos de envío</span>
+						<span>xxx€</span>
+					</div>
+					<hr />
+					@if (totalConDescuento != 0)
+					{
+						<div class="discount">
+							<span>Descuento aplicado</span>
+							<span>@descuento</span>
+						</div>
+						<div class="total-compra">
+							<span>Total con descuento</span>
+							<span>@totalConDescuento</span>
+						</div>
+					}
+					else
+					{
+						<div class="total-compra">
+							<span>Total compra</span>
+							<span>@Model.Sum(item => item.Precio * item.Cantidad).ToString("C")</span>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-7">
+				<div class="action-buttons">
+					<a asp-action="VaciarCarrito" class="btn btn-danger">Vaciar carrito</a>
+					<a asp-controller="Tienda" asp-action="Productos">Volver a la tienda</a>
+				</div>
+			</div>
+			<div class="col-5">
+				<div class="entrega">
+					<span>Entrega estimada</span>
+					<span>jueves 6 de marzo</span>
+				</div>
+				<div class="entrega-tooltip">
+					?
+				</div>
+			</div>
+		</div>
+
+		<h2>Total del carrito: @Model.Sum(item => (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad).ToString("C")</h2>
+	}
+	<a asp-controller="Tienda" asp-action="Productos" class="btn btn-primary">Seguir comprando</a>
+
+	<script>
+		function cambiarCantidad(idProducto, accion, cantidadActual = 1) {
+			if (accion === "restar" && cantidadActual <= 1) {
+				if (!confirm("¿Deseas eliminar este producto del carrito?")) {
+					return;
+				}
+			}
+			document.getElementById("accion-" + idProducto).value = accion;
+			document.getElementById("form-" + idProducto).submit();
+		}
+	</script>
+</div>

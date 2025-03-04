@@ -43,6 +43,8 @@ namespace Bougies.Controllers
 
             HttpContext.Session.SetString("userEmail", user.Email);
             HttpContext.Session.SetString("userName", user.Nombre);
+            HttpContext.Session.SetInt32("idUser", user.IdUsuario);
+            HttpContext.Session.SetInt32("idRol", user.IdRol);
 
             return RedirectToAction("Productos", "Tienda");
         }

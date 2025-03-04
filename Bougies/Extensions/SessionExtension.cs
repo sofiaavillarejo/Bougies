@@ -22,5 +22,18 @@ namespace Bougies.Extensions
                 return JsonConvert.DeserializeObject<T>(data); //deserializamos el objeto que tenemos para mostrarlo
             }
         }
+
+        public static void SetDecimal(this ISession session, string key, decimal value)
+        {
+            session.SetString(key, value.ToString()); // Convertimos el decimal a string y lo guardamos
+        }
+
+        // Método para recuperar un valor decimal
+        public static decimal GetDecimal(this ISession session, string key)
+        {
+            string value = session.GetString(key);
+            return value == null ? 0 : Convert.ToDecimal(value); // Si no existe, retornamos 0
+        }
+
     }
 }

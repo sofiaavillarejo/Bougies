@@ -18,5 +18,6 @@ namespace Bougies.Models
         public decimal Precio { get; set; }
         public int Cantidad { get; set; }
         public string Imagen { get; set; }
+        public int CodigoDescuento { get; set; }
     }
 }
