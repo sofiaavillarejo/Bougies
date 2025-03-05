@@ -87,5 +87,15 @@ namespace Bougies.Repositories
             var consulta = from datos in this.context.Roles select datos;
             return await consulta.ToListAsync();
         }
+
+        public async Task<int> GetValorDescuentoAsync(int idDescuento)
+        {
+            var descuento = await this.context.Descuento
+                                .Where(d => d.Id == idDescuento)
+                                .Select(d => d.Valor)
+                                .FirstOrDefaultAsync();
+
+            return descuento; // Si no encuentra el descuento, devolverá 0 por defecto.
+        }
     }
 }

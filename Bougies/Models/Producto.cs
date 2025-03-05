@@ -15,6 +15,10 @@ namespace Bougies.Models
         public string Descripcion { get; set; }
         [Column("Precio")]
         public decimal Precio { get; set; }
+
+        [NotMapped]
+        public decimal PrecioDescuento { get; set; }
+
         [Column("Stock")]
         public int Stock { get; set; }
         [Column("IdCategoria")]

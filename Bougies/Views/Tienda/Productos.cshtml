@@ -14,7 +14,17 @@
                 <img src="@Url.Content("~/images/" + item.Imagen)" alt="Imagen Producto" class="product-image" />
                 <h3 class="product-title">@item.Nombre</h3>
                 <p class="product-description">@item.Descripcion</p>
-                <span class="product-price">@item.Precio€</span>
+                @if (item.Precio != item.PrecioDescuento)
+                {
+                    <div class="product-price">
+                        <span style="color: red; font-weight: bold; font-size:18px">@item.PrecioDescuento.ToString("0.00")€</span>
+                        <span style="text-decoration: line-through; color: #bebebe;font-size:13px">@item.Precio€</span>
+                    </div>
+                }
+                else
+                {
+                    <span class="product-price">@item.Precio€</span>
+                }
             </a>
             <a asp-controller="Carrito" asp-action="AddProductCarrito"
                asp-route-id="@item.Id"
