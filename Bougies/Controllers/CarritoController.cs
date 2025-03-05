@@ -150,14 +150,27 @@ namespace Bougies.Controllers
         // ----------------- VACÍAR CARRITO -----------------
         public IActionResult VaciarCarrito()
         {
+            // Eliminar el carrito y el cupón de la sesión
             HttpContext.Session.Remove(SessionKeyCarrito);
+            HttpContext.Session.Remove("DESCUENTO");
+            HttpContext.Session.Remove("DescuentoTotal");
+            HttpContext.Session.Remove("TotalConDescuento");
+
             return RedirectToAction("Productos", "Tienda");
         }
+
 
         // ----------------- APLICAR CUPÓN DESCUENTO -----------------
 
         public async Task<IActionResult> AplicarCupon(string cupon)
         {
+            // Verificar si el cupón ya fue usado
+            if (HttpContext.Session.GetString("DESCUENTO") != null)
+            {
+                TempData["Error"] = "El cupón ya ha sido aplicado anteriormente.";
+                return RedirectToAction("Index");
+            }
+
             // Buscar el cupón en la base de datos
             CuponDescuento codigoCupon = await this.repo.FindCuponDescuentoAsync(cupon);
             HttpContext.Session.SetString("DESCUENTO", codigoCupon.Codigo);
@@ -192,6 +205,7 @@ namespace Bougies.Controllers
             List<Carrito> carritoActualizado = ObtenerCarrito();
             return View("Index", carritoActualizado);
         }
+
 
 
 
