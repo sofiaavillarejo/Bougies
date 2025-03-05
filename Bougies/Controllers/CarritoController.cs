@@ -160,6 +160,7 @@ namespace Bougies.Controllers
         {
             // Buscar el cupón en la base de datos
             CuponDescuento codigoCupon = await this.repo.FindCuponDescuentoAsync(cupon);
+            HttpContext.Session.SetString("DESCUENTO", codigoCupon.Codigo);
 
             if (codigoCupon == null || !codigoCupon.Activo || codigoCupon.Usado)
             {

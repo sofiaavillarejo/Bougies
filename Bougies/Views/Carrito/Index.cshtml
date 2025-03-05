@@ -1,10 +1,11 @@
 ﻿@model List<Bougies.Models.Carrito>
+
 @using Bougies.Extensions;
 
 @{
 	var totalConDescuento = Context.Session.GetDecimal("TotalConDescuento");
 	var descuento = Context.Session.GetDecimal("DescuentoTotal");
-
+	string codigoDescuento = Context.Session.GetString("DESCUENTO");
 }
 <link rel="stylesheet" href="/css/carrito.css" type="text/css">
 <div class="container">
@@ -42,7 +43,7 @@
 							<div class="product-image" style="width: 150px; height: 150px; background-image: url('@Url.Content("~/images/" + item.Imagen)'); background-size: cover; background-position: center;">
 							</div>
 							<div class="product-info">
-									<span style="font-size: 18px; font-weight: bold">@item.Nombre</span>
+								<span style="font-size: 18px; font-weight: bold">@item.Nombre</span>
 								<div class="prices">
 									<span style="text-decoration: line-through; color: #bebebe;font-size:13px">@item.Precio€</span>
 									@{
@@ -79,10 +80,10 @@
 						</div>
 						<div class="productDetails-bottom">
 							<span>Ref: 00000</span>
-							<a asp-controller="Carrito" asp-action="EliminarDelCarrito" asp-route-idproducto="@item.IdProducto"><i class="fa-regular fa-trash-can" style="color: #e7e7e7;"></i></a>
+							<a asp-controller="Carrito" asp-action="EliminarDelCarrito" asp-route-idproducto="@item.IdProducto"><i class="fa-regular fa-trash-can" style="color: #ababab; font-size:20px;"></i></a>
 						</div>
 						@* el hr en el ultimo no debe aparecer *@
-						<hr/>
+						<hr />
 					}
 				</div>
 			</div>
@@ -92,27 +93,38 @@
 						<span>¿Tienes un cupón?</span>
 						<div class="cupon-container">
 							<form method="post" asp-action="AplicarCupon" asp-controller="Carrito">
-								<input type="text" name="cupon" placeholder="Introduce el código" />
-								<button type="submit">Aplicar cupón</button>
+								<input type="text" name="cupon" placeholder="Introduce el código"
+									@if (codigoDescuento != null)
+									{
+										@:disabled="disabled"
+									} />
+								<button type="submit"
+									@if (codigoDescuento != null)
+									{
+										@:disabled="disabled"
+									}>
+									Aplicar cupón
+								</button>
 							</form>
+							<span style="color:#bebebe;"><i class="fa-solid fa-tags" style="color:#bebebe;"></i> @codigoDescuento</span>
 						</div>
 					</div>
 					<hr />
 					<div class="subtotal">
-						<span>Subtotal</span>
+						<div class="subtotal-precio">
+							<span>Subtotal</span>
+							@* Si el descuento se ha aplicado, mostrar el total con descuento *@
+							@if (totalConDescuento != 0)
+							{
+								<span>@totalConDescuento.ToString("C")</span>
+							}
+							else
+							{
+								<span>@Model.Sum(item => (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad).ToString("C")</span>
+							}
+						</div>
 
-						@* sacar cuando el producto tenga descuento *@
-						@* <span>Descuento aplicado: @((@item.Precio * (@item.Descuento / 100m)).ToString("0.00")) €</span> *@
 
-						@* Si el descuento se ha aplicado, mostrar el total con descuento *@
-						@if (totalConDescuento != 0)
-						{
-							<span>@totalConDescuento</span>
-						}
-						else
-						{
-							<span>@Model.Sum(item => (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad).ToString("C")</span>
-						}
 					</div>
 
 					<hr />
