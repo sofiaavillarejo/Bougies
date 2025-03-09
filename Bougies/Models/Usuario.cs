@@ -13,8 +13,14 @@ namespace Bougies.Models
         [Column("Nombre")]
         public string Nombre { get; set; }
 
+        [Column("Apellidos")]
+        public string Apellidos { get; set; }
+
         [Column("Email")]
         public string Email { get; set; }
+
+        [Column("Imagen")]
+        public string Imagen { get; set; }
 
         [Column("Passwd")]
         public string Passwd { get; set; }

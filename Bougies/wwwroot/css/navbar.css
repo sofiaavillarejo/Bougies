@@ -1,0 +1,31 @@
+﻿.navbar {
+    display: flex;
+    flex-direction: column;
+    background-color: #ad9986;
+}
+.navbar-header {
+    display: flex;
+    flex-direction: column;
+    width:100%
+}
+
+.navbar-one{
+    display: flex;
+    align-content: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.header-user {
+    display: flex;
+    justify-content: center;
+}
+
+.user-options {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav {
+    color: white;
+}

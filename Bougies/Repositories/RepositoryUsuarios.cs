@@ -24,32 +24,36 @@ namespace Bougies.Repositories
                 return await this.context.Usuarios.MaxAsync(x => x.IdUsuario) + 1;
             }
         }
-        public async Task RegistrarUser(string nombre, string email, string passwd)
+        public async Task<bool> RegistrarUser(string nombre, string apellidos, string email, string? fotoPerfil, string passwd)
         {
             if (await this.context.Usuarios.AnyAsync(u => u.Email == email))
             {
-                //el email ya existe
-                throw new InvalidOperationException("El emial ya existe");
+                return false; // Retorna false si el email ya existe
             }
-            else if (!ValidarPwd(passwd))
+
+            if (!ValidarPwd(passwd))
             {
                 throw new InvalidOperationException("La contraseña no cumple con los requisitos de seguridad.");
             }
-            else
+
+            Usuario user = new Usuario
             {
-                Usuario user = new Usuario();
-                user.IdUsuario = await this.GetMaxIdUser();
-                user.Nombre = nombre;
-                user.Email = email;
-                user.Passwd = HashPwd(passwd);
-                user.IdRol = 2;
-                user.CreatedAt = DateTime.Now;
+                IdUsuario = await this.GetMaxIdUser(),
+                Nombre = nombre,
+                Apellidos = apellidos,
+                Email = email,
+                Imagen = fotoPerfil,
+                Passwd = HashPwd(passwd),
+                IdRol = 2,
+                CreatedAt = DateTime.Now
+            };
 
-                await this.context.Usuarios.AddAsync(user);
-                await this.context.SaveChangesAsync();
-            }
+            await this.context.Usuarios.AddAsync(user);
+            await this.context.SaveChangesAsync();
 
+            return true; // Retorna true si el usuario fue registrado con éxito
         }
+
 
         //hashear contraseña
         private string HashPwd(string passwd)

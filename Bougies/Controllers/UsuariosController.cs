@@ -1,6 +1,7 @@
 ﻿using Bougies.Models;
 using Bougies.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Bougies.Controllers
 {
@@ -8,7 +9,7 @@ namespace Bougies.Controllers
     {
         private RepositoryUsuarios repo;
 
-        public UsuariosController (RepositoryUsuarios repo)
+        public UsuariosController(RepositoryUsuarios repo)
         {
             this.repo = repo;
         }
@@ -19,11 +20,59 @@ namespace Bougies.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registro(string nombre, string email, string passwd)
+        public async Task<IActionResult> Registro(Usuario user, IFormFile? imagen)
         {
-            await this.repo.RegistrarUser(nombre, email, passwd);
+            // Validar imagen
+            string? fileName = null;
+
+            if (imagen != null && imagen.Length > 0)
+            {
+                var extensionesPermitidas = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(imagen.FileName).ToLower();
+
+                if (!extensionesPermitidas.Contains(extension))
+                {
+                    ModelState.AddModelError("Imagen", "Formato de imagen no válido. Usa JPG, JPEG, PNG o GIF.");
+                    return View(user);
+                }
+
+                if (imagen.Length > 2 * 1024 * 1024) // 2MB
+                {
+                    ModelState.AddModelError("Imagen", "El archivo no debe superar los 2MB.");
+                    return View(user);
+                }
+
+                // Generar nombre único
+                fileName = Guid.NewGuid().ToString() + extension;
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "users");
+
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                var filePath = Path.Combine(directoryPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imagen.CopyToAsync(stream);
+                }
+            }
+
+            // Asignar imagen por defecto si el usuario no sube una
+            user.Imagen = fileName ?? "users/default-profile.png";
+
+            bool registrado = await this.repo.RegistrarUser(user.Nombre, user.Apellidos, user.Email, user.Imagen, user.Passwd);
+
+            if (!registrado)
+            {
+                TempData["Error"] = "El email ya está registrado.";
+                return View(user);
+            }
+
             return RedirectToAction("Login");
         }
+
 
         [HttpGet]
         public IActionResult Login()
@@ -34,7 +83,7 @@ namespace Bougies.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string passwd)
         {
-           Usuario user = await this.repo.LoginUser(email, passwd);
+            Usuario user = await this.repo.LoginUser(email, passwd);
             if (user == null || !BCrypt.Net.BCrypt.Verify(passwd, user.Passwd))
             {
                 ViewData["Error"] = "Email o contraseña incorrectos";
