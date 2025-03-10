@@ -3,6 +3,9 @@ using Bougies.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Bougies.Extensions;
+using Microsoft.Extensions.Caching.Memory;
+using Bougies.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bougies.Controllers
 {
@@ -11,10 +14,14 @@ namespace Bougies.Controllers
         private const string SessionKeyCarrito = "Carrito";
         private IRepositoryAdmin irepo;
         private RepositoryCarrito repo;
-        public CarritoController(IRepositoryAdmin irepo, RepositoryCarrito repo)
+        private IMemoryCache cache;
+        private BougiesContext context;
+        public CarritoController(BougiesContext context, IRepositoryAdmin irepo, RepositoryCarrito repo, IMemoryCache cache)
         {
             this.irepo = irepo;
             this.repo = repo;
+            this.cache = cache;
+            this.context = context;
         }
         public IActionResult Index()
         {
@@ -49,7 +56,7 @@ namespace Bougies.Controllers
                 carrito.Add(new Carrito
                 {
                     IdProducto = prod.Id,
-                    IdDescuento = idDescuento, 
+                    IdDescuento = idDescuento,
                     Descuento = descuento,
                     Nombre = prod.Nombre,
                     Precio = prod.Precio,
@@ -57,6 +64,9 @@ namespace Bougies.Controllers
                     Imagen = prod.Imagen
                 });
             }
+
+            decimal descuentoImporte = (prod.Precio * descuento) / 100m;
+            HttpContext.Session.SetDecimal("ImporteDescuento", descuentoImporte);
 
             // Guardar el carrito actualizado
             GuardarCarrito(carrito);
@@ -66,6 +76,8 @@ namespace Bougies.Controllers
 
         private List<Carrito> ObtenerCarrito()
         {
+            int gastosEnvio = 6;
+            HttpContext.Session.SetInt32("GastosEnvio", gastosEnvio);
             return HttpContext.Session.GetObject<List<Carrito>>(SessionKeyCarrito) ?? new List<Carrito>();
         }
         private void GuardarCarrito(List<Carrito> carrito)
@@ -148,8 +160,11 @@ namespace Bougies.Controllers
         }
 
         // ----------------- VACÍAR CARRITO -----------------
-        public IActionResult VaciarCarrito()
+        public async Task<IActionResult> VaciarCarrito()
         {
+            string codigoDescuento = HttpContext.Session.GetString("DESCUENTO");
+            await MarcarCuponComoDisponible(codigoDescuento);
+
             // Eliminar el carrito y el cupón de la sesión
             HttpContext.Session.Remove(SessionKeyCarrito);
             HttpContext.Session.Remove("DESCUENTO");
@@ -159,6 +174,22 @@ namespace Bougies.Controllers
             return RedirectToAction("Productos", "Tienda");
         }
 
+       //----------MARCAR CUPON DESCUENTO COMO DISPONIBLE DE NUEVO -----//
+        private async Task MarcarCuponComoDisponible(string codigoDescuento)
+        {
+            if (codigoDescuento != null)
+            {
+                var codigoValor = await this.context.CuponDescuento
+                    .FirstOrDefaultAsync(c => c.Codigo == codigoDescuento && c.Usado == true);
+
+                if (codigoValor != null)
+                {
+                    codigoValor.Usado = false;
+                    this.context.Update(codigoValor);
+                    await this.context.SaveChangesAsync();
+                }
+            }
+        }
 
         // ----------------- APLICAR CUPÓN DESCUENTO -----------------
 
@@ -192,7 +223,6 @@ namespace Bougies.Controllers
                 // Guardar el descuento total y el total con descuento en la sesión
                 HttpContext.Session.SetDecimal("DescuentoTotal", descuentoTotal);
                 HttpContext.Session.SetDecimal("TotalConDescuento", totalConDescuento);
-
                 // Marcar el cupón como usado
                 await this.repo.CuponUsado(codigoCupon.Codigo);
 

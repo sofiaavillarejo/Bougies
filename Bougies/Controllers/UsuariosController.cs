@@ -66,11 +66,11 @@ namespace Bougies.Controllers
 
             if (!registrado)
             {
-                TempData["Error"] = "El email ya está registrado.";
-                return View(user);
+                return Json(new { success = false, message = "El email ya está registrado." });
             }
 
-            return RedirectToAction("Login");
+            // Si todo va bien, se devuelve éxito
+            return Json(new { success = true, message = "¡Ya puedes iniciar sesión! 🚀" });
         }
 
 

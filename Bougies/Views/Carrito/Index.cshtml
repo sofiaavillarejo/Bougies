@@ -3,27 +3,20 @@
 @using Bougies.Extensions;
 
 @{
+	var importeDescuento = Context.Session.GetDecimal("ImporteDescuento");
 	var totalConDescuento = Context.Session.GetDecimal("TotalConDescuento");
 	var descuento = Context.Session.GetDecimal("DescuentoTotal");
 	string codigoDescuento = Context.Session.GetString("DESCUENTO");
-
+	int gastoEnvio = Context.Session.GetInt32("GastosEnvio") ?? 6;
 }
+
 <link rel="stylesheet" href="/css/carrito.css" type="text/css">
 <div class="container">
-	<h2>Carrito de Compras</h2>
-
 	@* mensajes cupon descuento *@
 	@if (TempData["Success"] != null)
 	{
 		<div class="alert alert-success">
 			@TempData["Success"]
-		</div>
-	}
-
-	@if (TempData["Error"] != null)
-	{
-		<div class="alert alert-danger">
-			@TempData["Error"]
 		</div>
 	}
 
@@ -83,8 +76,10 @@
 							<span>Ref: 00000</span>
 							<a asp-controller="Carrito" asp-action="EliminarDelCarrito" asp-route-idproducto="@item.IdProducto"><i class="fa-regular fa-trash-can" style="color: #ababab; font-size:20px;"></i></a>
 						</div>
-						@* el hr en el ultimo no debe aparecer *@
-						<hr />
+						@if (Model.Count() > 1 && !item.Equals(Model.LastOrDefault()))
+						{
+							<hr />
+						}
 					}
 				</div>
 			</div>
@@ -107,54 +102,57 @@
 									Aplicar cupón
 								</button>
 							</form>
-							@if (codigoDescuento != null)
-							{
-								<span style="color:#bebebe;"><i class="fa-solid fa-tags" style="color:#bebebe;"></i> @codigoDescuento</span>
-							}
+						@if (codigoDescuento != null)
+						{
+							<span style="color:#bebebe;"><i class="fa-solid fa-tags" style="color:#bebebe;"></i> @codigoDescuento</span>
+						}
 						</div>
 					</div>
 					<hr />
-					<div class="subtotal">
-						<div class="subtotal-precio">
-							<span>Subtotal</span>
-							@* Si el descuento se ha aplicado, mostrar el total con descuento *@
-							@if (totalConDescuento != null && totalConDescuento > 0)
-							{
-								<span>@totalConDescuento.ToString("C")</span>
-							}
-							else
-							{
-								<span>@Model.Sum(item =>(item.Descuento > 0 ? (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad : item.Precio * item.Cantidad)).ToString("C")</span>
-							}
+					<div class="info-precio">
+						@{
+							decimal precioProductos = Model.Sum(item =>
+							(item.Descuento > 0 ?
+							(item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad : item.Precio * item.Cantidad));
+
+							string precioConFormato = precioProductos.ToString("C");
+						}
+						<div class="subtotal">
+							<div class="subtotal-precio info-precio-display">
+								<span>Subtotal</span>
+								<span>@precioConFormato</span>
+							</div>
 						</div>
 
-
+						<div class="gastosEnvio info-precio-display">
+							<span>Gastos de envío</span>
+							<span>@gastoEnvio €</span>
+						</div>
+						@{
+							decimal totalFinal = (precioProductos + gastoEnvio-descuento);
+							string totalFinalFormato = totalFinal.ToString("C");
+						}
+						@if (descuento != 0)
+						{
+							<div class="discount info-precio-display">
+								<span>Descuento aplicado</span>
+								<span style="color:red">- @descuento.ToString("C")</span>
+							</div>
+							<hr/>
+							<div class="total-compra info-precio-display">
+								<span>Total con descuento</span>
+								<span style="font-weight: bold; font-size: 25px;">@totalFinalFormato</span>
+							</div>
+						}
+						else
+						{
+							<hr />
+							<div class="total-compra info-precio-display">
+								<span>Total compra</span>
+								<span style="font-weight: bold; font-size: 25px;">@totalFinalFormato</span>
+							</div>
+						}
 					</div>
-
-					<hr />
-					<div class="gastosEnvio">
-						<span>Gastos de envío</span>
-						<span>xxx€</span>
-					</div>
-					<hr />
-					@if (totalConDescuento != 0)
-					{
-						<div class="discount">
-							<span>Descuento aplicado</span>
-							<span>@descuento</span>
-						</div>
-						<div class="total-compra">
-							<span>Total con descuento</span>
-							<span>@totalConDescuento</span>
-						</div>
-					}
-					else
-					{
-						<div class="total-compra">
-							<span>Total compra</span>
-							<span>@Model.Sum(item => item.Precio * item.Cantidad).ToString("C")</span>
-						</div>
-					}
 				</div>
 			</div>
 		</div>

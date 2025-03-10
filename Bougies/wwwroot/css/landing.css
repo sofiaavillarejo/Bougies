@@ -1011,3 +1011,24 @@ blockquote {
 .brand {
     color: white;
 }
+
+.banner {
+    background-image: url('../images/panelVelasoriginal.jpg');
+    background-size: cover;
+    width: 100%;
+    height: 50vh;
+    background-position: 50% 73%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.bougies {
+    font-size: 2rem;
+    color: white;
+}
+
+.intro-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

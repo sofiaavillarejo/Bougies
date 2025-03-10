@@ -5,14 +5,9 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAntiforgery();
 
-builder.Services.AddDistributedMemoryCache();
+builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Define el tiempo que permanecerá la sesión activa
-    options.Cookie.HttpOnly = true; // Solo accesible por HTTP
-    options.Cookie.IsEssential = true; // Necesario para el funcionamiento de la app
-});
+builder.Services.AddSession();
 
 string connectionString = builder.Configuration.GetConnectionString("Bougies");
 builder.Services.AddDbContext<BougiesContext>(options => options.UseSqlServer(connectionString));

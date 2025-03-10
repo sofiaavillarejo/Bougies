@@ -1,7 +1,7 @@
 ﻿.navbar {
     display: flex;
     flex-direction: column;
-    background-color: #ad9986;
+    padding: 30px 56px;
 }
 .navbar-header {
     display: flex;
@@ -9,11 +9,12 @@
     width:100%
 }
 
-.navbar-one{
+.navbar-one {
     display: flex;
     align-content: center;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
 }
 
 .header-user {
@@ -28,4 +29,54 @@
 
 .navbar-nav {
     color: white;
+}
+
+.petit-formal-script-regular {
+    font-family: "Petit Formal Script", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.resultados-container {
+    position: absolute;
+    width: 25%;
+    max-height: 300px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+}
+
+    .resultados-container a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        text-decoration: none;
+        color: black;
+        gap: 15px;
+    }
+
+        .resultados-container a:hover {
+            background-color: #f8f8f8;
+        }
+
+    .resultados-container img {
+        width:80%;
+        height: 100px;
+        border-radius: 20px;
+        object-fit: cover;
+    }
+
+.producto{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+hr {
+    margin: 5px;
 }

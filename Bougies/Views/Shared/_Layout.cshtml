@@ -14,7 +14,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - Bougies</title>
+	<title>Bougies</title>
 	<script type="importmap"></script>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -33,7 +33,9 @@
 	@* <link rel="stylesheet" href="https://r.mobirisesite.com/1225067/assets/css/mbr-additional.css?rnd=1740137554309" type="text/css"> *@
 	<link rel="stylesheet" href="/css/additional.css" type="text/css">
 	<link rel="stylesheet" href="/css/navbar.css" type="text/css">
-
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Petit+Formal+Script&family=Poiret+One&display=swap" rel="stylesheet">
 	<style>
 		.navbar-fixed-top {
 			top: auto;
@@ -123,13 +125,18 @@
 <body>
 	<div>
 		<main role="main">
-			<nav class="navbar navbar-expand-sm navbar-toggleable-sm sticky-top">
+			<nav class="navbar navbar-expand-sm navbar-toggleable-sm">
 				<div class="navbar-header">
 					<div class="navbar-one">
-						<div class="buscador"></div>
-						<a style="font-family: 'Bricolage Grotesque', sans-serif; color: white;" asp-action="Index" asp-controller="Tienda">Bougies</a>
+						<div class="buscador">
+							<div class="input-wrapper">
+								<input type="text" id="searchInput" class="input" placeholder="Buscar producto..." onkeyup="buscarProducto()" autocomplete="off" />
+								<div id="resultadosBusqueda" class="resultados-container"></div>
+							</div>
+						</div>
+						<a class="petit-formal-script-regular" asp-action="Index" asp-controller="Tienda" style="font-size: 2.5rem; color: black; text-decoration: none;">Bougies</a>
 						<div class="user-options">
-							<a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Registro" style="color: white;">Registrarse</a>
+							<a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Registro">Registrarse</a>
 
 							@if (user != null)
 							{
@@ -138,11 +145,11 @@
 							}
 							else
 							{
-								<a asp-controller="Usuarios" asp-action="Login" style="color: white;">Iniciar sesión</a>
+								<a asp-controller="Usuarios" asp-action="Login">Iniciar sesión</a>
 								<span>@user</span>
 							}
 							@* <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"> <i class="fa-regular fa-user"></i></a> *@
-							<a class="nav-link" asp-area="" asp-controller="Carrito" asp-action="Index" style="color: white;"><i class="fa-solid fa-cart-shopping" style="color: white;"></i>(@cantidadProductos)</a>
+							<a class="nav-link" asp-area="" asp-controller="Carrito" asp-action="Index"><i class="fa-solid fa-cart-shopping"></i>(@cantidadProductos)</a>
 						</div>
 					</div>
 				</div>
@@ -151,10 +158,13 @@
 					<div class="navbar-two">
 						<ul class="navbar-nav flex-grow-1">
 							<li class="nav-item">
-								<a class="nav-link" asp-area="" asp-controller="Tienda" asp-action="Productos" style="color: white;">Productos</a>
+								<a class="nav-link" asp-area="" asp-controller="Tienda" asp-action="Productos">PRODUCTOS</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" asp-area="" style="color: white;">Sobre nosotros</a>
+								<a class="nav-link" href="/Tienda/Index#header01-2">Sobre nosotros</a>
+							</li>
+							<li class="nav-item">
+								<a style="color:red" class="nav-link" asp-area="" asp-controller="Tienda" asp-action="Ofertas">OFERTAS</a>
 							</li>
 						</ul>
 					</div>
@@ -163,6 +173,37 @@
 			@RenderBody()
 		</main>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		function buscarProducto() {
+			var query = document.getElementById("searchInput").value;
+			var resultadosContainer = document.getElementById("resultadosBusqueda");
+
+			if (query.length < 2) {
+				resultadosContainer.style.display = "none";
+				return;
+			}
+
+			fetch('/Tienda/BuscadorAjax?query=' + encodeURIComponent(query))
+				.then(response => response.text())
+				.then(data => {
+					resultadosContainer.innerHTML = data;
+					resultadosContainer.style.display = "block";
+				})
+				.catch(error => console.error('Error en la búsqueda:', error));
+		}
+
+		// Ocultar resultados si se hace clic fuera del input
+		document.addEventListener("click", function (event) {
+			var searchInput = document.getElementById("searchInput");
+			var resultadosContainer = document.getElementById("resultadosBusqueda");
+
+			if (!searchInput.contains(event.target) && !resultadosContainer.contains(event.target)) {
+				resultadosContainer.style.display = "none";
+			}
+		});
+	</script>
 
 	<script src="https://kit.fontawesome.com/6f5f758826.js" crossorigin="anonymous"></script>
 
@@ -179,6 +220,8 @@
 	<script src="https://r.mobirisesite.com/1225067/assets/mbr-switch-arrow/mbr-switch-arrow.js?rnd=1740137554309"></script>
 	<script src="https://r.mobirisesite.com/1225067/assets/theme/js/script.js?rnd=1740137554309"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 	@await RenderSectionAsync("Scripts", required: false)
 
 

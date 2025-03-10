@@ -1,0 +1,38 @@
+﻿@model List<ProductoView>
+
+@if (Model != null && Model.Any())
+{
+    <div class="resultadosBusqueda">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var producto = Model[i];
+            <div class="producto">
+                <a asp-controller="Tienda" asp-action="DetalleProducto" asp-route-idproducto="@producto.IdProducto">
+                    <img src="~/images/@producto.Imagen" alt="@producto.Nombre"/>
+                    <span>@producto.Nombre</span>
+                    @if (producto.PrecioDescuento != 0 && producto.Precio != producto.PrecioDescuento)
+                    {
+                        <div class="product-price">
+                            <span style="color: red; font-weight: bold; font-size:18px">@producto.PrecioDescuento.ToString("C")</span>
+                            <span style="text-decoration: line-through; color: #bebebe;font-size:13px">@producto.Precio€</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="product-price" style="font-weight: bold;">@producto.Precio€</span>
+                    }
+                </a>
+                @if (i < Model.Count - 1)
+                {
+                    <hr />
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="resultados-container">
+        <span>No se encontraron resultados</span>
+    </div>
+}
