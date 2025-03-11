@@ -14,5 +14,7 @@ namespace Bougies.Repositories
 
         //ROLES DE USUARIO
         Task<List<Roles>> GetRolesAsync();
+
+        Task<List<Producto>> GetProductosRebajadosAsync();
     }
 }

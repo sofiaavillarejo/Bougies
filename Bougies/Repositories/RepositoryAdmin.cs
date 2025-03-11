@@ -97,5 +97,11 @@ namespace Bougies.Repositories
 
             return descuento; // Si no encuentra el descuento, devolverá 0 por defecto.
         }
+
+        public async Task<List<Producto>> GetProductosRebajadosAsync()
+        {
+            var consulta = from datos in this.context.Producto where datos.IdDescuento != 1 select datos;
+            return await consulta.ToListAsync();
+        }
     }
 }

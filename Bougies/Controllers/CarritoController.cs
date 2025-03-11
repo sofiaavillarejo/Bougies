@@ -142,21 +142,14 @@ namespace Bougies.Controllers
                 return RedirectToAction("Login", "Usuarios");
             }
 
-            try
-            {
-                int idPedido = await this.repo.TramitarPedido(idUsuario, idMetodoPago, direccion, ciudad, codigoPostal, poblacion, carrito);
+            int idPedido = await this.repo.TramitarPedido(idUsuario, idMetodoPago, direccion, ciudad, codigoPostal, poblacion, carrito);
 
-                // Limpiar carrito tras realizar el pedido
-                HttpContext.Session.Remove(SessionKeyCarrito);
+            // Limpiar carrito tras realizar el pedido
+            HttpContext.Session.Remove(SessionKeyCarrito);
 
-                ViewData["Success"] = "Pedido tramitado correctamente.";
-                return RedirectToAction("Index", new { idPedido });
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = $"Error al procesar el pedido: {ex.Message}";
-                return RedirectToAction("Index");
-            }
+            ViewData["Success"] = "Pedido tramitado correctamente.";
+            return RedirectToAction("ConfirmacionPedido", "Pedidos", new { idPedido = idPedido });
+
         }
 
         // ----------------- VACÍAR CARRITO -----------------
@@ -174,7 +167,7 @@ namespace Bougies.Controllers
             return RedirectToAction("Productos", "Tienda");
         }
 
-       //----------MARCAR CUPON DESCUENTO COMO DISPONIBLE DE NUEVO -----//
+        //----------MARCAR CUPON DESCUENTO COMO DISPONIBLE DE NUEVO -----//
         private async Task MarcarCuponComoDisponible(string codigoDescuento)
         {
             if (codigoDescuento != null)

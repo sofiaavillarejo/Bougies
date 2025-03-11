@@ -37,9 +37,19 @@ namespace Bougies.Controllers
             this.context.Pedidos.Add(ped);
             await this.context.SaveChangesAsync();
 
-            return RedirectToAction("Tienda", "Productos");
+            return RedirectToAction("ConfirmacionPedido", new { idPedido = ped.IdPedido });
         }
 
+        public IActionResult ConfirmacionPedido(int idPedido)
+        {
+            var pedido = this.context.Pedidos.FirstOrDefault(p => p.IdPedido == idPedido);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+
+            return View(pedido);
+        }
 
     }
 }

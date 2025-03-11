@@ -27,5 +27,6 @@ namespace Bougies.Models
         public int IdDescuento { get; set; }
         [Column("Imagen")]
         public string Imagen { get; set; }
+
     }
 }

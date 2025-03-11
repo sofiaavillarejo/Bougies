@@ -21,5 +21,6 @@ namespace Bougies.Models
 
         [Column("Total")]
         public decimal Total { get; set; }
+
     }
 }

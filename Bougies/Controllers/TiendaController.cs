@@ -87,5 +87,25 @@ namespace Bougies.Controllers
             }
             return PartialView("_ResultadosBusqueda", productosView);
         }
+
+        public async Task<IActionResult> Ofertas()
+        {
+            List<Producto> productosRebajados = await this.repo.GetProductosRebajadosAsync();
+
+            foreach (var producto in productosRebajados)
+            {
+                int descuento = await this.repo.GetValorDescuentoAsync(producto.IdDescuento);
+
+                if (descuento > 0)
+                {
+                    producto.PrecioDescuento = producto.Precio - (producto.Precio * descuento / 100);
+                }
+                else
+                {
+                    producto.PrecioDescuento = producto.Precio; // Si no hay descuento, mantiene el mismo precio
+                }
+            }
+            return View(productosRebajados);
+        } 
     }
 }
