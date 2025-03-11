@@ -120,6 +120,7 @@
 .productDetails-info {
     display: flex;
     gap: 10px;
+    padding: 15px;
 }
 
 .product-image {
@@ -183,14 +184,25 @@ a:hover {
     justify-content: space-between;
 }
 
-.discount{
+.discount {
     display: flex;
+    gap: 15px;
     flex-direction: column;
-    gap: 10px;
+
 }
 
 .cupon-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.tramitarBtn {
+    width: 100%;
+    border-radius: 30px;
+    padding: 10px 0;
+    background-color: #ad9986;
+    color: white;
+    border: none;
+    font-size: 18px;
 }

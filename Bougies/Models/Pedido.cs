@@ -20,7 +20,7 @@ namespace Bougies.Models
         public decimal Total { get; set; }
 
         [Column("Estado")]
-        public string Estado { get; set; }
+        public string Estado { get; set; } = "Pendiente";
 
         [Column("IdMetodoPago")]
         public int IdMetodoPago { get; set; }

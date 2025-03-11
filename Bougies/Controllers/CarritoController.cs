@@ -150,7 +150,7 @@ namespace Bougies.Controllers
                 HttpContext.Session.Remove(SessionKeyCarrito);
 
                 ViewData["Success"] = "Pedido tramitado correctamente.";
-                return RedirectToAction("PedidoConfirmado", new { idPedido });
+                return RedirectToAction("Index", new { idPedido });
             }
             catch (Exception ex)
             {
@@ -236,6 +236,10 @@ namespace Bougies.Controllers
             return View("Index", carritoActualizado);
         }
 
+        public IActionResult Checkout()
+        {
+            return View();
+        }
 
 
 

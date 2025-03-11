@@ -39,13 +39,24 @@
 							<div class="product-info">
 								<span style="font-size: 18px; font-weight: bold">@item.Nombre</span>
 								<div class="prices">
-									<span style="text-decoration: line-through; color: #bebebe;font-size:13px">@item.Precio€</span>
 									@{
 										var precioConDescuento = item.Precio - (item.Precio * (item.Descuento / 100m));
 									}
-									<span style="color: red; font-weight: bold; font-size:16px">
-										@precioConDescuento.ToString("C")
-									</span>
+									@if (item.Descuento > 0)
+									{
+										<span style="text-decoration: line-through; color: #bebebe; font-size: 13px;">
+											@item.Precio€
+										</span>
+										<span style="color: red; font-weight: bold; font-size: 16px;">
+											@precioConDescuento.ToString("C")
+										</span>
+									}
+									else
+									{
+										<span style="color: black; font-weight: bold; font-size: 16px;">
+											@item.Precio€
+										</span>
+									}
 								</div>
 								<div class="product-quantity">
 									<form method="post" asp-action="ActualizarCantidad" asp-controller="Carrito" id="form-@item.IdProducto">
@@ -102,10 +113,10 @@
 									Aplicar cupón
 								</button>
 							</form>
-						@if (codigoDescuento != null)
-						{
-							<span style="color:#bebebe;"><i class="fa-solid fa-tags" style="color:#bebebe;"></i> @codigoDescuento</span>
-						}
+							@if (codigoDescuento != null)
+							{
+								<span style="color:#bebebe;"><i class="fa-solid fa-tags" style="color:#bebebe; margin: 1rem 0;"></i> @codigoDescuento</span>
+							}
 						</div>
 					</div>
 					<hr />
@@ -123,22 +134,32 @@
 								<span>@precioConFormato</span>
 							</div>
 						</div>
-
+						@{
+							gastoEnvio = precioProductos > 30 ? 0 : gastoEnvio;
+						}
 						<div class="gastosEnvio info-precio-display">
 							<span>Gastos de envío</span>
-							<span>@gastoEnvio €</span>
+							@if (gastoEnvio == 0)
+							{
+								<span style="color: green; font-weight: bold;">Envío gratis</span>
+							}
+							else
+							{
+								<span>@gastoEnvio €</span>
+							}
 						</div>
+
 						@{
-							decimal totalFinal = (precioProductos + gastoEnvio-descuento);
+							decimal totalFinal = (precioProductos + gastoEnvio - descuento);
 							string totalFinalFormato = totalFinal.ToString("C");
 						}
 						@if (descuento != 0)
 						{
-							<div class="discount info-precio-display">
+							<div class="info-precio-display">
 								<span>Descuento aplicado</span>
 								<span style="color:red">- @descuento.ToString("C")</span>
 							</div>
-							<hr/>
+							<hr />
 							<div class="total-compra info-precio-display">
 								<span>Total con descuento</span>
 								<span style="font-weight: bold; font-size: 25px;">@totalFinalFormato</span>
@@ -154,6 +175,10 @@
 						}
 					</div>
 				</div>
+				<div class="btnTramitarpedido mt-4">
+					<a asp-controller="Carrito" asp-action="Checkout" class="tramitarBtn">Tramitar pedido</a>
+				</div>
+
 			</div>
 		</div>
 		<div class="row mt-4">
@@ -163,17 +188,17 @@
 					<a asp-controller="Tienda" asp-action="Productos" class="buttonsCarrito">Volver a la tienda</a>
 				</div>
 			</div>
-			<div class="col-5">
-				<div class="info-entrega">
-					<div class="entrega">
-						<span>Entrega estimada</span>
-						<span>jueves 6 de marzo</span>
-					</div>
-					<div class="entrega-tooltip">
-						?
-					</div>
-				</div>
-			</div>
+			@* <div class="col-5"> *@
+			@* 	<div class="info-entrega"> *@
+			@* 		<div class="entrega"> *@
+			@* 			<span>Entrega estimada</span> *@
+			@* 			<span>jueves 6 de marzo</span> *@
+			@* 		</div> *@
+			@* 		<div class="entrega-tooltip"> *@
+			@* 			? *@
+			@* 		</div> *@
+			@* 	</div> *@
+			@* </div> *@
 		</div>
 
 		@* <h2>Total del carrito: @Model.Sum(item => (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad).ToString("C")</h2> *@
