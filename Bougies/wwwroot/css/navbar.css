@@ -423,3 +423,15 @@
         display: none;
     }
 }
+
+.registerBtn {
+    background-color: #ad9986;
+    padding: 10px;
+    border-radius: 8px;
+    color: white !important;
+}
+
+.registerBtn:hover {
+    background-color: white;
+    color: #ad9986 !important;
+}
