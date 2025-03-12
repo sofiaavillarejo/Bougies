@@ -108,5 +108,54 @@ namespace Bougies.Repositories
 
             return null;
         }
+
+        //--------USER PERFIL---------------//
+        public async Task<Usuario> PerfilUsuarioAsync(int idUsuario)
+        {
+            var user = await this.context.Usuarios.FirstOrDefaultAsync(u => u.IdUsuario == idUsuario);
+            return user;
+        }
+
+        public async Task<bool> ActualizarPerfilAsync(Usuario usuario, string nuevaPasswd, IFormFile nuevaImagen)
+        {
+            var user = await this.context.Usuarios.FindAsync(usuario.IdUsuario);
+            if (user == null)
+                return false;
+
+            // Actualizar datos
+            user.Nombre = usuario.Nombre;
+            user.Apellidos = usuario.Apellidos;
+            user.Email = usuario.Email;
+
+            // Si el usuario ingresó una nueva contraseña, se actualiza
+            if (!string.IsNullOrEmpty(nuevaPasswd))
+            {
+                user.Passwd = BCrypt.Net.BCrypt.HashPassword(nuevaPasswd);
+            }
+
+            // Si hay nueva imagen, se actualiza
+            if (nuevaImagen != null)
+            {
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(nuevaImagen.FileName);
+                string filePath = Path.Combine("wwwroot/images/users", uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await nuevaImagen.CopyToAsync(stream);
+                }
+
+                user.Imagen = uniqueFileName;
+            }
+
+            this.context.Usuarios.Update(user);
+            await this.context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<Pedido>> GetPedidoUserAsync(int idUsuario)
+        {
+            List<Pedido> pedidos = await this.context.Pedidos.Where(p => p.IdUsuario == idUsuario).ToListAsync();
+            return pedidos;
+        }
     }
 }

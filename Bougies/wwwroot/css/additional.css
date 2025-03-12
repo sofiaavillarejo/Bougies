@@ -2,7 +2,7 @@
     border-width: 2px;
 }
 
-img,
+
 .card-wrap,
 .card-wrapper,
 .video-wrapper,
@@ -16,11 +16,12 @@ img,
 }
 
 .video-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    /* justify-content: center; */
+    align-items: center;.content
     overflow: hidden;
-}
-
-body {
-    font-family: Rethink Sans;
 }
 
 .display-1 {
@@ -367,25 +368,25 @@ body {
 .btn-primary-outline,
 .btn-primary-outline:active {
     background-color: transparent !important;
-    border-color: #6e381c;
-    color: #6e381c;
+    border-color: #ad9986;
+    color: #ad9986;
 }
 
     .btn-primary-outline:hover,
     .btn-primary-outline:focus,
     .btn-primary-outline.focus,
     .btn-primary-outline.active {
-        color: #6e381c !important;
+        color: #ad9986 !important;
         background-color: transparent !important;
-        border-color: #6e381c !important;
+        border-color: #ad9986 !important;
         box-shadow: none !important;
     }
 
     .btn-primary-outline.disabled,
     .btn-primary-outline:disabled {
         color: #ffffff !important;
-        background-color: #6e381c !important;
-        border-color: #6e381c !important;
+        background-color: #ad9986 !important;
+        border-color: #ad9986 !important;
     }
 
 .btn-secondary-outline,
@@ -950,7 +951,7 @@ a {
 .mbr-section-btn-main .btn-primary-outline:hover,
 .mbr-section-btn .btn-primary-outline:focus,
 .mbr-section-btn-main .btn-primary-outline:focus {
-    background-color: #6e381c !important;
+    background-color: #ad9986 !important;
     color: white !important;
 }
 
@@ -1010,9 +1011,6 @@ a {
     color: #000000 !important;
 }
 
-img {
-    border-radius: 20px !important;
-}
 
 .cid-u6kyoksNxH {
     background-color: transparent;
@@ -2818,8 +2816,7 @@ img {
 }
 
 .cid-u6kyCVfeRY .content-wrapper {
-    padding: 50px 60px;
-    background-color: #fdfbf7;
+    padding: 0px 60px;
     border-radius: 20px;
 }
 
@@ -2831,6 +2828,10 @@ img {
 
 .cid-u6kyCVfeRY .content-wrapper .content-wrap {
     margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 18px;
 }
 
 @media (max-width: 992px) {
@@ -2843,13 +2844,9 @@ img {
     margin-bottom: 16px;
 }
 
-.cid-u6kyCVfeRY .content-wrapper .content-wrap .mbr-section-subtitle {
-    margin-bottom: 16px;
-}
-
 .cid-u6kyCVfeRY .content-wrapper .content-wrap .text-wrapper .mbr-text {
     display: inline-flex;
-    width: 60%;
+    width: 100%;
     margin-bottom: 0;
     flex-direction: column;
 }

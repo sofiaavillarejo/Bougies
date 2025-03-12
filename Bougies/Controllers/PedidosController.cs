@@ -18,6 +18,7 @@ namespace Bougies.Controllers
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> CrearPedido([FromForm] Pedido pedido)
         {

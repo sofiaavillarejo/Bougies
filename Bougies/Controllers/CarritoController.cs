@@ -85,6 +85,7 @@ namespace Bougies.Controllers
             HttpContext.Session.SetObject(SessionKeyCarrito, carrito);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult ActualizarCantidad(int idProducto, string accion)
         {
@@ -125,6 +126,8 @@ namespace Bougies.Controllers
         }
 
         // ----------------- TRAMITAR PEDIDO -----------------
+
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> TramitarPedido(int idMetodoPago, string direccion, string ciudad, string codigoPostal, string poblacion)
         {

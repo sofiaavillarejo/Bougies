@@ -17,7 +17,7 @@ builder.Services.AddTransient<RepositoryCarrito>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+    
 var app = builder.Build();
 
 

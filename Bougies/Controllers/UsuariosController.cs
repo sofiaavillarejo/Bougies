@@ -19,6 +19,7 @@ namespace Bougies.Controllers
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Registro(Usuario user, IFormFile? imagen)
         {
@@ -73,13 +74,12 @@ namespace Bougies.Controllers
             return Json(new { success = true, message = "¡Ya puedes iniciar sesión! 🚀" });
         }
 
-
-        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(string email, string passwd)
         {
@@ -92,6 +92,7 @@ namespace Bougies.Controllers
 
             HttpContext.Session.SetString("userEmail", user.Email);
             HttpContext.Session.SetString("userName", user.Nombre);
+            HttpContext.Session.SetString("userImage", user.Imagen);
             HttpContext.Session.SetInt32("idUser", user.IdUsuario);
             HttpContext.Session.SetInt32("idRol", user.IdRol);
 
@@ -102,6 +103,53 @@ namespace Bougies.Controllers
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
+        }
+
+        public async Task<IActionResult> PerfilUsuario(int idUsuario)
+        {
+            Usuario user = await this.repo.PerfilUsuarioAsync(idUsuario);
+            return View(user);
+        }
+
+        //actualizar el perfil
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> ActualizarPerfil(Usuario usuario, string? NuevaPasswd, IFormFile? Imagen)
+        {
+            bool actualizado = await this.repo.ActualizarPerfilAsync(usuario, NuevaPasswd, Imagen);
+
+            if (actualizado)
+            {
+                // 🔹 Obtener usuario actualizado
+                Usuario userActualizado = await this.repo.PerfilUsuarioAsync(usuario.IdUsuario);
+
+                // 🔹 Actualizar los datos en la sesión
+                HttpContext.Session.SetString("userName", userActualizado.Nombre);
+                if (!string.IsNullOrEmpty(userActualizado.Imagen))
+                {
+                    HttpContext.Session.SetString("userImage", userActualizado.Imagen);
+                }
+
+                //TempData["Success"] = "Perfil actualizado correctamente.";
+            }
+            else
+            {
+                TempData["Error"] = "Error al actualizar el perfil.";
+            }
+
+            return RedirectToAction("PerfilUsuario", new { idUsuario = usuario.IdUsuario });
+        }
+
+        public async Task<IActionResult> PedidosUsuario(int idUsuario)
+        {
+            var pedidos = await this.repo.GetPedidoUserAsync(idUsuario);
+
+            if (pedidos == null || pedidos.Count == 0)
+            {
+                return NotFound("No se encontraron pedidos para este usuario.");
+            }
+
+            return View(pedidos);
         }
     }
 }

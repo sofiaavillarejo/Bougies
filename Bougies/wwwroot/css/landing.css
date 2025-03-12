@@ -386,10 +386,6 @@ nav .mbr-section-btn {
     -webkit-appearance: none;
 }
 
-/*! Full-screen */
-.mbr-fullscreen .mbr-overlay {
-    min-height: 100vh;
-}
 
 .mbr-fullscreen {
     display: flex;
@@ -397,8 +393,6 @@ nav .mbr-section-btn {
     display: -ms-flex;
     display: -o-flex;
     align-items: center;
-    min-height: 100vh;
-    padding-bottom: 3rem;
 }
 
 /*! Map */
@@ -843,54 +837,6 @@ body {
     border-color: red;
 }
 
-.row > * {
-    padding-right: 1rem;
-    padding-left: 1rem;
-}
-
-form .row {
-    margin-left: -0.6rem;
-    margin-right: -0.6rem;
-}
-
-    form .row [class*=col] {
-        padding-left: 0.6rem;
-        padding-right: 0.6rem;
-    }
-
-form .mbr-section-btn {
-    padding-left: 0.6rem;
-    padding-right: 0.6rem;
-}
-
-form .form-check-input {
-    margin-top: 0.5;
-}
-
-textarea.form-control {
-    line-height: 1.5rem !important;
-}
-
-.form-group {
-    margin-bottom: 1.2rem;
-}
-
-.form-control,
-form .btn {
-    min-height: 48px;
-}
-
-.gdpr-block label span.textGDPR input[name=gdpr] {
-    top: 7px;
-}
-
-.form-control:focus {
-    box-shadow: none;
-}
-
-:focus {
-    outline: none;
-}
 
 .mbr-overlay {
     background-color: #000;
@@ -927,21 +873,7 @@ blockquote {
     margin-bottom: 2rem !important;
 }
 
-.container,
-.container-fluid {
-    padding-left: 16px;
-    padding-right: 16px;
-}
 
-.row {
-    margin-left: -16px;
-    margin-right: -16px;
-}
-
-    .row > [class*=col] {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
 
 @media (min-width: 992px) {
     .container-fluid {

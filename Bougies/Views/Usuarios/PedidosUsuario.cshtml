@@ -1,0 +1,32 @@
+﻿@model List<Pedido>
+
+<h2>Pedidos del Usuario</h2>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>ID Pedido</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <!-- Otras columnas de Pedido -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pedido in Model)
+            {
+                <tr>
+                    <td>@pedido.IdPedido</td>
+                    <td>@pedido.FechaPedido</td>
+                    <td>@pedido.Estado</td>
+                    <!-- Otras columnas de Pedido -->
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No se encontraron pedidos para este usuario.</p>
+}
