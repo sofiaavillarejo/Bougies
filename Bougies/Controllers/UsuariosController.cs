@@ -91,36 +91,39 @@ namespace Bougies.Controllers
             {
                 ViewData["Error"] = "Email o contraseña incorrectos";
                 return View();
-            }
+            }else
+            {
+                var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.Nombre),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim(ClaimTypes.Role, user.IdRol == 1 ? "Admin" : "Cliente"),
+                        new Claim("IdUser", user.IdUsuario.ToString()),
+                        new Claim("UserImage", user.Imagen)
+                    };
 
-            var claims = new List<Claim>
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                ClaimsPrincipal userPrincipal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, new AuthenticationProperties
                 {
-                    new Claim(ClaimTypes.Name, user.Nombre),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.IdRol == 1 ? "Admin" : "Cliente"),
-                    new Claim("IdUser", user.IdUsuario.ToString()),
-                    new Claim("UserImage", user.Imagen)
-                };
+                    ExpiresUtc = DateTime.Now.AddHours(1)
+                });
 
-            ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            ClaimsPrincipal userPrincipal = new ClaimsPrincipal(identity);
+                string controller = TempData["controller"]?.ToString() ?? "Tienda";
+                string action = TempData["action"]?.ToString() ?? "Index";
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, new AuthenticationProperties
-            {
-                ExpiresUtc = DateTime.Now.AddHours(1)
-            });
-
-            string controller = TempData["controller"].ToString();
-            string action = TempData["action"].ToString();
-            if (TempData["id"] != null)
-            {
-                string id = TempData["id"].ToString();
-                return RedirectToAction(action, controller, new { id = id });
+                if (TempData["id"] != null)
+                {
+                    string id = TempData["id"].ToString();
+                    return RedirectToAction(action, controller, new { id = id });
+                }
+                else
+                {
+                    return RedirectToAction(action, controller);
+                }
             }
-            else
-            {
-                return RedirectToAction(action, controller);
-            }
+
 
 
 
