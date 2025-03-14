@@ -1,66 +1,77 @@
-﻿<h2>Registro</h2>
+﻿<link rel="stylesheet" href="/css/registroform.css" type="text/css">
+<div class="container-fluid">
+	<div class="registro-container">
+		<h2>Registro</h2>
+		
+		<form id="formRegistro" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="nombre">Nombre</label>
+				<input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Ingrese su nombre" />
+			</div>
+			<div class="form-group">
+				<label for="apellidos">Apellidos</label>
+				<input type="text" class="form-control" id="apellidos" name="apellidos" required placeholder="Ingrese sus apellidos" />
+			</div>
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input type="email" class="form-control" id="email" name="email" required placeholder="Ingrese su email" />
+			</div>
+			<div class="form-group">
+				<label for="imagen">Foto de perfil</label>
+				<input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" />
+			</div>
+			<div class="form-group">
+				<label for="passwd">Contraseña</label>
+				<input type="password" class="form-control" id="passwd" name="passwd" required placeholder="Ingrese su contraseña" />
+			</div>
+			<button type="submit" class="registerBtn registerBtn--form" style="border: none; width: 100%;">Registrar</button>
+		</form>
+		<div class="text-center mt-3">
+			<span>¿Ya tienes cuenta?</span>
+			<a asp-controller="Usuarios" asp-action="Login" style="color: #0d6efd;">Inicia sesión</a>
+		</div>
+	</div>
 
-<form id="formRegistro" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="nombre">Nombre</label>
-        <input type="text" class="form-control" id="nombre" name="nombre" required />
-    </div>
-    <div class="form-group">
-        <label for="apellidos">Apellidos</label>
-        <input type="text" class="form-control" id="apellidos" name="apellidos" required />
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" name="email" required />
-    </div>
-    <div class="form-group">
-        <label for="email">Foto de perfil</label>
-        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" />
-    </div>
-    <div class="form-group">
-        <label for="passwd">Contraseña</label>
-        <input type="password" class="form-control" id="passwd" name="passwd" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Registrar</button>
-</form>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    document.getElementById("formRegistro").addEventListener("submit", function(e) {
-        e.preventDefault();
+	document.getElementById("formRegistro").addEventListener("submit", function(e) {
+		e.preventDefault();
 
-        let formData = new FormData(this);
+		let formData = new FormData(this);
 
-        fetch("/Usuarios/Registro", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json()) // Esperar una respuesta JSON
-        .then(result => {
-            if (result.success) {
-                // Si la respuesta es exitosa, mostrar el SweetAlert de éxito
-                Swal.fire({
-                    title: "Usuario registrado correctamente",
-                    text: result.message,
-                    icon: "success",
-                    confirmButtonText: "OK"
-                }).then(() => {
-                    window.location.href = "/Usuarios/Login"; // Redirigir al login
-                });
-            } else {
-                // Si hubo un error en el registro
-                Swal.fire({
-                    title: "Error",
-                    text: result.message,
-                    icon: "error",
-                    confirmButtonText: "OK"
-                });
-            }
-        })
-        .catch(error => {
-            // Si hubo un error en la solicitud
-            Swal.fire("Error", "Hubo un problema al registrar el usuario.", "error");
-        });
-    });
+		fetch("/Usuarios/Registro", {
+			method: "POST",
+			body: formData
+		})
+		.then(response => response.json()) // Esperar una respuesta JSON
+		.then(result => {
+			if (result.success) {
+				// Si la respuesta es exitosa, mostrar el SweetAlert de éxito
+				Swal.fire({
+					title: "Usuario registrado correctamente",
+					text: result.message,
+					icon: "success",
+					confirmButtonText: "OK"
+				}).then(() => {
+					window.location.href = "/Usuarios/Login"; // Redirigir al login
+				});
+			} else {
+				// Si hubo un error en el registro
+				Swal.fire({
+					title: "Error",
+					text: result.message,
+					icon: "error",
+					confirmButtonText: "OK"
+				});
+			}
+		})
+		.catch(error => {
+			// Si hubo un error en la solicitud
+			Swal.fire("Error", "Hubo un problema al registrar el usuario.", "error");
+		});
+	});
 </script>

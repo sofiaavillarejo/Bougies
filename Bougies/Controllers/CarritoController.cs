@@ -6,6 +6,9 @@ using Bougies.Extensions;
 using Microsoft.Extensions.Caching.Memory;
 using Bougies.Data;
 using Microsoft.EntityFrameworkCore;
+using Bougies.Filters;
+using System.Security.Claims;
+using System.Runtime.InteropServices;
 
 namespace Bougies.Controllers
 {
@@ -116,10 +119,28 @@ namespace Bougies.Controllers
         }
 
         // ----------------- ELIMINAR PRODUCTO DEL CARRITO -----------------
-        public IActionResult EliminarDelCarrito(int idProducto)
+        public async Task<IActionResult> EliminarDelCarrito(int idProducto)
         {
             List<Carrito> carrito = ObtenerCarrito();
+            var cupon = HttpContext.Session.GetString("DESCUENTO");
+
             carrito.RemoveAll(p => p.IdProducto == idProducto);
+            HttpContext.Session.Remove(SessionKeyCarrito);
+            HttpContext.Session.Remove("DescuentoTotal");
+            HttpContext.Session.Remove("TotalConDescuento");
+            if (!carrito.Any())
+            {
+                var codigoValor = await this.context.CuponDescuento
+                    .FirstOrDefaultAsync(c => c.Codigo == cupon && c.Usado == true);
+                if (codigoValor != null)
+                {
+                    
+                    HttpContext.Session.Remove("DESCUENTO");
+                    codigoValor.Usado = false;
+                    this.context.Update(codigoValor);
+                    await this.context.SaveChangesAsync();
+                }
+            }
             GuardarCarrito(carrito);
 
             return RedirectToAction("Index");
@@ -127,6 +148,7 @@ namespace Bougies.Controllers
 
         // ----------------- TRAMITAR PEDIDO -----------------
 
+        [AuthorizeUsers]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> TramitarPedido(int idMetodoPago, string direccion, string ciudad, string codigoPostal, string poblacion)
@@ -137,20 +159,11 @@ namespace Bougies.Controllers
             {
                 return RedirectToAction("Productos");
             }
-
-            int idUsuario = HttpContext.Session.GetInt32("idUser") ?? 0;
-            if (idUsuario == 0)
-            {
-                ViewData["Error"] = "Debes iniciar sesión para realizar un pedido.";
-                return RedirectToAction("Login", "Usuarios");
-            }
-
+            int idUsuario = int.Parse(User.FindFirst("IdUser").Value);
             int idPedido = await this.repo.TramitarPedido(idUsuario, idMetodoPago, direccion, ciudad, codigoPostal, poblacion, carrito);
 
-            // Limpiar carrito tras realizar el pedido
             HttpContext.Session.Remove(SessionKeyCarrito);
 
-            ViewData["Success"] = "Pedido tramitado correctamente.";
             return RedirectToAction("ConfirmacionPedido", "Pedidos", new { idPedido = idPedido });
 
         }
@@ -232,6 +245,7 @@ namespace Bougies.Controllers
             return View("Index", carritoActualizado);
         }
 
+        [AuthorizeUsers]
         public IActionResult Checkout()
         {
             return View();

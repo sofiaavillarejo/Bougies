@@ -42,7 +42,7 @@ namespace Bougies.Repositories
                 Nombre = nombre,
                 Apellidos = apellidos,
                 Email = email,
-                Imagen = fotoPerfil,
+                Imagen = fotoPerfil ?? "images/users/userprofile.jpg",
                 Passwd = HashPwd(passwd),
                 IdRol = 2,
                 CreatedAt = DateTime.Now

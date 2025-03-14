@@ -1,11 +1,17 @@
 ﻿@model Bougies.Models.Pedido
+<link rel="stylesheet" href="/css/confirmacionpedido.css" type="text/css">
 
-<h2>Confirmación de Pedido</h2>
+<h2 class="display-5">Confirmación de Pedido</h2>
 
-<div>
-    <h3>Pedido #@Model.IdPedido</h3>
-    <p>Fecha: @Model.FechaPedido</p>
-    <p>Dirección: @Model.Direccion, @Model.Ciudad, @Model.CodigoPostal, @Model.Poblacion</p>
-    <p>Total: @Model.Total</p>
-    <p>Estado: @Model.Estado</p>
+<div class="container-fluid">
+	<div class="info">
+		<h3>Pedido #@Model.IdPedido</h3>
+		<p>Fecha: @Model.FechaPedido</p>
+		<p>Dirección: @Model.Direccion, @Model.Ciudad, @Model.CodigoPostal, @Model.Poblacion</p>
+		<p>Total: @Model.Total €</p>
+		<p>Estado: @Model.Estado</p>
+		<div style="display: flex; justify-content: center;">
+			<a asp-controller="Tienda" asp-action="Productos">Volver a la tienda</a>
+		</div>
+	</div>
 </div>

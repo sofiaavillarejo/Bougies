@@ -1,13 +1,12 @@
 ﻿@model Bougies.Models.Usuario
-@{
-    ViewData["Title"] = "Perfil de Usuario";
-}
 
-<div class="container mt-5">
-    <div class="card shadow-lg p-4">
-        <h2 class="text-center mb-4">Mi Perfil</h2>
+<link rel="stylesheet" href="/css/profileuser.css" type="text/css">
 
-        <div class="row">
+<div class="container-fluid">
+    <div class="card shadow-lg p-4" style="border-radius: 1rem;">
+        <h2 class="display-5">Mi perfil</h2>
+
+        <div class="row" style="align-items: center;">
             <!-- Imagen de perfil -->
             <div class="col-md-4 text-center">
                 <img id="previewImage" src="@Url.Content("~/images/users/" + Model.Imagen)"
@@ -20,14 +19,14 @@
             <div class="col-md-8">
                 <h4>@Model.Nombre @Model.Apellidos</h4>
                 <p><strong>Email:</strong> @Model.Email</p>
-                <button class="btn btn-primary" id="btnEditar">Editar Perfil</button>
+                <button class="registerBtn registerBtn--form w-100" style="border: none;" id="btnEditar">Editar Perfil</button>
             </div>
         </div>
 
         <!-- Formulario oculto por defecto -->
         <div id="formEditar" class="mt-4" style="display: none;">
-            <hr>
-            <h4>Editar Perfil</h4>
+            <h4 class="text-center">Editar Perfil</h4>
+            <hr/>
             <form asp-controller="Usuarios" asp-action="ActualizarPerfil" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="IdUsuario" />
 
@@ -56,9 +55,10 @@
                     <label for="Imagen" class="form-label">Cambiar imagen</label>
                     <input type="file" id="Imagen" name="Imagen" class="form-control" onchange="mostrarImagen(event)">
                 </div>
-
-                <button type="submit" class="btn btn-success">Guardar cambios</button>
-                <button type="button" class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+                <div class="buttons">
+                    <button type="submit" class="btn btn-success">Guardar cambios</button>
+                    <button type="button" class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+                </div>
             </form>
         </div>
     </div>

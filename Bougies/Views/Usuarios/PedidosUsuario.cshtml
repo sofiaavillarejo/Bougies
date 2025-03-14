@@ -1,32 +1,51 @@
 ﻿@model List<Pedido>
+<link rel="stylesheet" href="/css/pedidosuser.css" type="text/css">
 
-<h2>Pedidos del Usuario</h2>
+<h2 class="display-5">Pedidos del Usuario</h2>
 
 @if (Model != null && Model.Count > 0)
 {
-    <table>
-        <thead>
-            <tr>
-                <th>ID Pedido</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-                <!-- Otras columnas de Pedido -->
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var pedido in Model)
-            {
-                <tr>
-                    <td>@pedido.IdPedido</td>
-                    <td>@pedido.FechaPedido</td>
-                    <td>@pedido.Estado</td>
-                    <!-- Otras columnas de Pedido -->
-                </tr>
-            }
-        </tbody>
-    </table>
+	<div class="info">
+		<div id="contenido-pedidos">
+			<table>
+				<thead>
+					<tr>
+						<th>ID Pedido</th>
+						<th>Fecha</th>
+						<th>Total</th>
+						<th>Estado</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var pedido in Model)
+					{
+						<tr>
+							<td>@pedido.IdPedido</td>
+							<td>@pedido.FechaPedido.ToString("dd/MM/yyyy")</td>
+							<td>@pedido.Total€</td>
+							<td>
+								<span class="status" style="background-color: @(pedido.Estado == "Pendiente" ? "#fff3cd" : "#e6f3e6");
+                                    color: @(pedido.Estado == "Pendiente" ? "#856404" : "#2e7d32");">
+									@pedido.Estado
+								</span>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+
+			<div class="divider"></div>
+
+			<a href="#" class="return-button">Volver a la tienda</a>
+		</div>
+	</div> <!-- Cierre del div info -->
 }
 else
 {
-    <p>No se encontraron pedidos para este usuario.</p>
+	<div id="sin-pedidos">
+		<div class="no-orders">
+			<p>No se encontraron pedidos para este usuario.</p>
+		</div>
+		<a href="#" class="return-button">Ir a la tienda</a>
+	</div>
 }

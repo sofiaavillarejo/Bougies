@@ -17,7 +17,7 @@
                 @if (item.Precio != item.PrecioDescuento)
                 {
                     <div class="product-price">
-                        <span style="color: red; font-weight: bold; font-size:18px">@item.PrecioDescuento.ToString("0.00")€</span>
+                        <span style="color: #d35846; font-size:18px">@item.PrecioDescuento.ToString("0.00")€</span>
                         <span style="text-decoration: line-through; color: #bebebe;font-size:13px">@item.Precio€</span>
                     </div>
                 }

@@ -43,7 +43,7 @@
 	}
 	else
 	{
-		<h1>Mi bolsa (@Model.Sum(item => item.Cantidad))</h1>
+		<h1 class="display-5">Mi bolsa (@Model.Sum(item => item.Cantidad))</h1>
 		<div class="row">
 			<div class="col-7">
 				<div class="productDetails">
@@ -109,6 +109,10 @@
 						}
 					}
 				</div>
+				<div class="action-buttons mt-4">
+					<a style="text-decoration: none; color:#ad9986" asp-action="VaciarCarrito" class="buttonsCarrito"><i class="fa-regular fa-trash-can" style="color: #ad9986;"></i>Vaciar carrito</a>
+					<a asp-controller="Tienda" asp-action="Productos" class="buttonsCarrito">Volver a la tienda</a>
+				</div>
 			</div>
 			<div class="col-5">
 				<div class="resume">
@@ -154,10 +158,13 @@
 							gastoEnvio = precioProductos > 30 ? 0 : gastoEnvio;
 						}
 						<div class="gastosEnvio info-precio-display">
-							<span>Gastos de envío</span>
+							<div style="display: flex; flex-direction: column;">
+								<span>Gastos de envío</span>
+								<span style="font-size: 12px; color: gray">Envío gratuito a partir de 30€</span>
+							</div>
 							@if (gastoEnvio == 0)
 							{
-								<span style="color: green; font-weight: bold;">Envío gratis</span>
+								<span style="color: green;">Envío gratis</span>
 							}
 							else
 							{
@@ -190,33 +197,12 @@
 						}
 					</div>
 				</div>
-				<div class="btnTramitarpedido mt-4">
-					<a asp-controller="Carrito" asp-action="Checkout" class="tramitarBtn">Tramitar pedido</a>
-				</div>
-
+				<form asp-controller="Carrito" asp-action="Checkout" method="get">
+					<button type="submit" class="registerBtn registerBtn--form mt-4 w-100" style="border: none;">Tramitar pedido</button>
+				</form>
 			</div>
 		</div>
-		<div class="row mt-4">
-			<div class="col-7">
-				<div class="action-buttons">
-					<a style="text-decoration: none; color:#ad9986" asp-action="VaciarCarrito" class="buttonsCarrito"><i class="fa-regular fa-trash-can" style="color: #ad9986;"></i>Vaciar carrito</a>
-					<a asp-controller="Tienda" asp-action="Productos" class="buttonsCarrito">Volver a la tienda</a>
-				</div>
-			</div>
-			@* <div class="col-5"> *@
-			@* 	<div class="info-entrega"> *@
-			@* 		<div class="entrega"> *@
-			@* 			<span>Entrega estimada</span> *@
-			@* 			<span>jueves 6 de marzo</span> *@
-			@* 		</div> *@
-			@* 		<div class="entrega-tooltip"> *@
-			@* 			? *@
-			@* 		</div> *@
-			@* 	</div> *@
-			@* </div> *@
-		</div>
 
-		@* <h2>Total del carrito: @Model.Sum(item => (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad).ToString("C")</h2> *@
 	}
 	<script>
 		function cambiarCantidad(idProducto, accion, cantidadActual = 1) {
@@ -230,3 +216,16 @@
 		}
 	</script>
 </div>
+		@* <h2>Total del carrito: @Model.Sum(item => (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad).ToString("C")</h2> *@
+
+			@* <div class="col-5"> *@
+			@* 	<div class="info-entrega"> *@
+			@* 		<div class="entrega"> *@
+			@* 			<span>Entrega estimada</span> *@
+			@* 			<span>jueves 6 de marzo</span> *@
+			@* 		</div> *@
+			@* 		<div class="entrega-tooltip"> *@
+			@* 			? *@
+			@* 		</div> *@
+			@* 	</div> *@
+			@* </div> *@

@@ -120,7 +120,6 @@
 .productDetails-info {
     display: flex;
     gap: 10px;
-    padding: 15px;
 }
 
 .product-image {
@@ -141,7 +140,7 @@
     text-decoration: none;
 }
 
-.action-buttons{
+.action-buttons {
     display: flex;
     justify-content: space-between;
 }
@@ -152,13 +151,13 @@
     padding: 2rem;
 }
 
-.prices{
+.prices {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.productDetails-bottom{
+.productDetails-bottom {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -179,28 +178,100 @@
     justify-content: space-between;
 }
 
-.discount {
-    display: flex;
-    gap: 15px;
-    flex-direction: column;
+/* Coupon section container */
 
+
+.discount > span {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 0.75rem;
 }
 
+/* Coupon form container */
 .cupon-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0.75rem;
 }
 
-.tramitarBtn {
-    width: 100%;
-    border-radius: 30px;
-    padding: 10px 0;
-    background-color: #ad9986;
-    color: white;
-    border: none;
-    font-size: 18px;
+    /* Coupon input field */
+    .cupon-container input[type="text"] {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e7e7e7;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .cupon-container input[type="text"]:focus {
+            outline: none;
+            border-color: #ad9986;
+            box-shadow: 0 0 0 2px rgba(173, 153, 134, 0.1);
+        }
+
+        .cupon-container input[type="text"]::placeholder {
+            color: #bebebe;
+        }
+
+        .cupon-container input[type="text"]:disabled {
+            background-color: #f9f9f9;
+            cursor: not-allowed;
+        }
+
+    /* Coupon submit button */
+    .cupon-container button {
+        background-color: #ad9986;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 2rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        .cupon-container button:hover {
+            background-color: #9a8775;
+        }
+
+        .cupon-container button:active {
+            transform: scale(0.98);
+        }
+
+        .cupon-container button:disabled {
+            background-color: #d1c9c0;
+            cursor: not-allowed;
+        }
+
+    /* Applied coupon display */
+    .cupon-container > span {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: #bebebe;
+    }
+
+        .cupon-container > span i {
+            font-size: 1rem;
+        }
+
+/* Media query for responsive design */
+@media (min-width: 768px) {
+    .cupon-container form {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .cupon-container button {
+        flex-shrink: 0;
+    }
 }
+/*----------------------------------------------------*/
 
 .productsLink {
     color: #ad9986;
@@ -249,3 +320,20 @@
     .nav-link:hover:after {
         width: 100%;
     }
+
+.registerBtn {
+    background-color: #ad9986;
+    padding: 10px;
+    border-radius: 8px;
+    color: white !important;
+}
+
+.registerBtn a{
+    color: white !important;
+}
+.registerBtn:hover {
+    border: 1px solid #ad9986 !important;
+}
+.registerBtn a:hover {
+    color: #ad9986 !important;
+}

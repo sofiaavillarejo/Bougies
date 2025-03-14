@@ -49,6 +49,11 @@ namespace Bougies.Controllers
         public async Task<IActionResult> DetalleProducto(int idProducto)
         {
             Producto prod = await this.repo.FindProducto(idProducto);
+            int descuento = prod.IdDescuento != null ? await this.repo.GetValorDescuentoAsync(prod.IdDescuento) : 0;
+
+            // Calcular precio con descuento y asignarlo al modelo
+            prod.PrecioDescuento = prod.Precio - (prod.Precio * ((decimal)descuento / 100));
+
             return View(prod);
         }
 

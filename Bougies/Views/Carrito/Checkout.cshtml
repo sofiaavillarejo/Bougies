@@ -1,182 +1,85 @@
-﻿@{
-    ViewData["Title"] = "Checkout";
-}
+﻿@using System.Security.Claims;
 
-<h2>Finalizar Compra</h2>
+<link rel="stylesheet" href="/css/checkout.css" type="text/css">
 
-<div class="checkout-container">
-    <form id="checkoutForm" asp-controller="Carrito" asp-action="TramitarPedido" method="post">
+<h2 class="display-5">Finalizar Compra</h2>
+<div class="container-fluid">
+	<div class="checkout-container" style="background-color: white;">
+		<form id="checkoutForm" asp-controller="Carrito" asp-action="TramitarPedido" method="post">
+			<!-- 🚀 PASO 1: Información Personal -->
+			<div class="step" id="step1">
+				<input type="hidden" name="IdUsuario" value="2" />
+				<h3>Información Personal</h3>
+				<label>Nombre</label>
+				<input type="text" name="nombre" required value="@Context.User.Identity.Name" readonly />
 
+				<label>Email</label>
+				<input type="email" name="email" required value="@User.FindFirst(ClaimTypes.Email).Value" readonly />
 
-        <!-- 🚀 PASO 1: Información Personal -->
-        <div class="step" id="step1">
-        <input type="hidden" name="IdUsuario" value="2" />
-            <h3>Paso 1: Información Personal</h3>
-            <label>Nombre</label>
-            <input type="text" name="nombre" required />
+				<div class="btn-container">
+					<button type="button" onclick="nextStep(2)">Continuar</button>
+				</div>
+			</div>
 
-            <label>Email</label>
-            <input type="email" name="email" required />
+			<!-- 🚀 PASO 2: Dirección de Envío -->
+			<div class="step" id="step2" style="display: none;">
+				<h3>Dirección de Envío</h3>
+				<label>Dirección</label>
+				<input type="text" name="direccion" required />
 
-            <button type="button" onclick="nextStep(2)">Continuar</button>
-        </div>
+				<label>Ciudad</label>
+				<input type="text" name="ciudad" required />
 
-        <!-- 🚀 PASO 2: Dirección de Envío -->
-        <div class="step" id="step2" style="display: none;">
-            <h3>Paso 2: Dirección de Envío</h3>
-            <label>Dirección</label>
-            <input type="text" name="direccion" required />
+				<label>Código Postal</label>
+				<input type="text" name="codigoPostal" required />
 
-            <label>Ciudad</label>
-            <input type="text" name="ciudad" required />
+				<label>Población</label>
+				<input type="text" name="poblacion" required />
+				<div class="btn-container">
+					<button type="button" onclick="prevStep(1)">Atrás</button>
+					<button type="button" onclick="nextStep(3)">Continuar</button>
+				</div>
 
-            <label>Código Postal</label>
-            <input type="text" name="codigoPostal" required />
+			</div>
 
-            <label>Población</label>
-            <input type="text" name="poblacion" required />
+			<!-- 🚀 PASO 3: Método de Pago -->
+			<div class="step" id="step3" style="display: none;">
+				<h3>Método de Pago</h3>
+				<label>Selecciona un método de pago</label>
+				<select name="idMetodoPago" required>
+					<option value="1">Tarjeta de Crédito</option>
+					<option value="2">PayPal</option>
+				</select>
+				<div class="btn-container">
+					<button type="button" onclick="prevStep(2)">Atrás</button>
+					<button type="button" onclick="nextStep(4)">Continuar</button>
+				</div>
 
-            <button type="button" onclick="prevStep(1)">Atrás</button>
-            <button type="button" onclick="nextStep(3)">Continuar</button>
-        </div>
+			</div>
 
-        <!-- 🚀 PASO 3: Método de Pago -->
-        <div class="step" id="step3" style="display: none;">
-            <h3>Paso 3: Método de Pago</h3>
-            <label>Selecciona un método de pago</label>
-            <select name="idMetodoPago" required>
-                <option value="1">Tarjeta de Crédito</option>
-                <option value="2">PayPal</option>
-            </select>
+			<!-- 🚀 PASO 4: Confirmación del Pedido -->
+			<div class="step" id="step4" style="display: none;">
+				<h3>Confirmación del Pedido</h3>
+				<p style="padding: 20px 0;">Revisa que toda la información sea correcta antes de confirmar el pedido.</p>
+				<div class="btn-container">
+					<button type="button" onclick="prevStep(3)">Atrás</button>
+					<button type="submit">Confirmar Pedido</button>
+				</div>
 
-            <button type="button" onclick="prevStep(2)">Atrás</button>
-            <button type="button" onclick="nextStep(4)">Continuar</button>
-        </div>
-
-        <!-- 🚀 PASO 4: Confirmación del Pedido -->
-        <div class="step" id="step4" style="display: none;">
-            <h3>Paso 4: Confirmación del Pedido</h3>
-            <p>Revisa que toda la información sea correcta antes de confirmar el pedido.</p>
-
-            <button type="button" onclick="prevStep(3)">Atrás</button>
-            <button type="submit">Confirmar Pedido</button>
-        </div>
-    </form>
+			</div>
+		</form>
+	</div>
 </div>
 
 <script>
-    function nextStep(step) {
-        document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
-        document.getElementById('step' + step).style.display = 'block';
-    }
+	function nextStep(step) {
+		document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
+		document.getElementById('step' + step).style.display = 'block';
+	}
 
-    function prevStep(step) {
-        document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
-        document.getElementById('step' + step).style.display = 'block';
-    }
+	function prevStep(step) {
+		document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
+		document.getElementById('step' + step).style.display = 'block';
+	}
 </script>
 
-<style>
-    /* 🚀 Contenedor del formulario */
-    .checkout-container {
-        max-width: 500px;
-        margin: auto;
-        padding: 20px;
-        border: 1.2px solid #e7e7e7;
-        border-radius: 1rem;
-        background-color: #f9f9f9;
-    }
-
-    /* 🚀 Estilos para los pasos del formulario */
-    .step {
-        display: none;
-    }
-
-        .step:first-child {
-            display: block;
-        }
-
-    /* 🚀 Etiquetas de los campos */
-    label {
-        font-size: 14px;
-        color: #a0a0a0;
-        font-weight: bold;
-    }
-
-    /* 🚀 Campos de entrada */
-    /* input, */
-    /* select { */
-    /*     width: 100%; */
-    /*     padding: 8px 12px; */
-    /*     border: 1px solid #ddd; */
-    /*     border-radius: 5px; */
-    /*     font-size: 14px; */
-    /*     background-color: #fff; */
-    /*     margin-bottom: 10px; */
-    /* } */
-
-    /* 🚀 Botones del formulario */
-    .checkout-button {
-        background-color: #ad9986;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        font-weight: bold;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background 0.3s ease-in-out;
-        text-decoration: none;
-        display: flex;
-        border-radius: 5rem;
-        gap: 5px;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .checkout-button:hover {
-            background-color: #9a8775;
-        }
-
-    /* 🚀 Botón atrás */
-    .back-button {
-        background-color: transparent;
-        color: #ad9986;
-        border: 2px solid #ad9986;
-        padding: 10px 15px;
-        border-radius: 5rem;
-        font-weight: bold;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background 0.3s ease-in-out;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .back-button:hover {
-            background-color: #f9f9f9;
-        }
-
-    /* 🚀 Contenedor de botones */
-    .button-container {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
-
-    /* 🚀 Título del paso */
-    h3 {
-        font-size: 18px;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    /* 🚀 Alineación de contenido */
-    .checkout-container input,
-    .checkout-container select,
-    .checkout-container button {
-        width: 100%;
-    }
-
-</style>

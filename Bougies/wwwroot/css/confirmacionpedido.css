@@ -1,0 +1,135 @@
+﻿/* Confirmation container */
+.info {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1.2px solid #e7e7e7;
+    border-radius: 1rem;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Page title */
+h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    position: relative;
+    text-align: center;
+}
+
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: #ad9986;
+        border-radius: 2px;
+    }
+
+/* Order heading */
+h3 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e7e7e7;
+    font-weight: 600;
+}
+
+/* Order information */
+.order-info {
+    margin-bottom: 2rem;
+}
+
+/* Order details */
+p {
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Labels for order information */
+.label {
+    font-weight: 500;
+    color: #888;
+    display: inline-block;
+    width: 100px;
+}
+
+/* Order status */
+.status {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background-color: #e6f3e6;
+    color: #2e7d32;
+}
+
+/* Total amount */
+.total {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Return to shop button */
+.return-button {
+    display: block;
+    width: fit-content;
+    margin: 2rem auto 0;
+    padding: 0.75rem 1.5rem;
+    background-color: #ad9986;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+    .return-button:hover {
+        background-color: #9a8775;
+    }
+
+/* Thank you message */
+.thank-you {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .confirmation-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Order summary divider */
+.divider {
+    height: 1px;
+    background-color: #e7e7e7;
+    margin: 1.5rem 0;
+}

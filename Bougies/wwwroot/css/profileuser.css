@@ -1,0 +1,168 @@
+﻿.container-fluid {
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    max-width: 1200px;
+    padding: 2rem;
+    margin: 0 auto;
+}
+
+.card {
+    width: 100%;
+    max-width: 600px;
+    border: none;
+    border-radius: 1rem !important;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08) !important;
+    padding: 40px !important;
+    margin: 0 auto;
+}
+
+h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+}
+
+    h2:after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 2px;
+        background-color: #ad9986;
+        margin: 15px auto 0;
+    }
+
+h4 {
+    color: #555;
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.form-label {
+    font-weight: 400;
+    color: #555;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    border-radius: 4px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+    .form-control:focus {
+        border-color: #ad9986;
+        box-shadow: 0 0 0 0.2rem rgba(173, 153, 134, 0.15);
+    }
+
+.text-muted {
+    color: #888 !important;
+    font-size: 0.85rem;
+}
+
+.btn {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.btn-primary {
+    background-color: #ad9986;
+    border: none;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #9a8573;
+    }
+
+.btn-success {
+    background-color: #ad9986;
+    border: none;
+    color: white;
+}
+
+    .btn-success:hover {
+        background-color: #9a8573;
+    }
+
+.btn-secondary {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    color: #555;
+}
+
+    .btn-secondary:hover {
+        background-color: #f0f0f0;
+        border: 1px solid #ad9986 !important;
+    }
+
+/* Profile image styles */
+.rounded-circle {
+    border: 3px solid #f8f8f8;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+    .rounded-circle:hover {
+        border-color: #ad9986;
+    }
+
+/* Form styles */
+#formEditar {
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+    padding: 25px;
+    border-radius: 6px;
+    margin-top: 30px;
+}
+
+hr {
+    border-color: #eee;
+    margin: 25px 0;
+}
+
+strong {
+    font-weight: 500;
+    color: #666;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .card {
+        padding: 25px !important;
+    }
+
+    .col-md-4, .col-md-8 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+.registerBtn--form:hover {
+    border: 1px solid #ad9986 !important;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}

@@ -1,6 +1,7 @@
 ﻿@using Newtonsoft.Json;
 @using Bougies.Extensions;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using System.Security.Claims; @*para recuperar los claims*@
 
 @{
 	List<Carrito> carrito = Context.Session.GetObject<List<Carrito>>("Carrito") ?? new List<Carrito>();
@@ -152,22 +153,23 @@
 						<div class="brand-container">
 							<a class="brand-name" asp-action="Index" asp-controller="Tienda">Bougies</a>
 						</div>
-
 						<div class="user-options">
-							@if (user == null)
+							@if (!Context.User.Identity.IsAuthenticated)
 							{
 								<a class="registerBtn" asp-controller="Usuarios" asp-action="Registro">Registrarse</a>
 							}
-							@if (user != null)
+
+							@if (Context.User.Identity.IsAuthenticated)
 							{
 								<div class="dropdown">
-									<span>👋🏻 Hola, @user</span>
+									<!-- Obtener el nombre y la imagen del usuario desde los claims -->
+									<span>👋🏻 Hola, @User.Identity.Name</span>
 									<div class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-										<img src="@Url.Content("~/images/users/" + userImage)" style="width: 40px; height: 40px; border-radius: 50%;" />
+										<img src="@Url.Content("~/images/users/" + (User.FindFirst("UserImage")?.Value ?? "userprofile.jpg"))" style="width: 40px; height: 40px; border-radius: 50%;" />
 									</div>
 									<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-										<li><a class="dropdown-item" asp-controller="Usuarios" asp-action="PerfilUsuario" asp-route-idusuario="@idUser">Mi perfil</a></li>
-										<li><a class="dropdown-item" asp-controller="Usuarios" asp-action="PedidosUsuario" asp-route-idusuario="@idUser">Mis pedidos</a></li>
+										<li><a class="dropdown-item" asp-controller="Usuarios" asp-action="PerfilUsuario" asp-route-idusuario="@User.FindFirst("IdUser")?.Value">Mi perfil</a></li>
+										<li><a class="dropdown-item" asp-controller="Usuarios" asp-action="PedidosUsuario" asp-route-idusuario="@User.FindFirst("IdUser")?.Value">Mis pedidos</a></li>
 										<li><a class="dropdown-item" asp-controller="Usuarios" asp-action="Logout">Cerrar sesión</a></li>
 									</ul>
 								</div>
@@ -176,14 +178,12 @@
 							{
 								<a asp-controller="Usuarios" asp-action="Login">Iniciar sesión</a>
 							}
-
 							<a class="cart-icon" asp-area="" asp-controller="Carrito" asp-action="Index">
 								<i class="fa-solid fa-cart-shopping"></i>
 								<span class="cart-counter">@cantidadProductos</span>
 							</a>
 						</div>
 					</div>
-
 				</div>
 
 				<div class="header-user">
@@ -223,7 +223,7 @@
 						</div>
 
 						<ul class="social-links">
-							<li><a href="www.linkedin.com/in/sofiavillarejo" target="_blank"><i class="fa-brands fa-linkedin fa-xl"></i></a></li>
+							<li><a href="https://www.linkedin.com/in/sofiavillarejo/" target="_blank"><i class="fa-brands fa-linkedin fa-xl"></i></a></li>
 							<li><a href="https://github.com/sofiaavillarejo" target="_blank"><i class="fa-brands fa-square-github fa-xl"></i></a></li>
 						</ul>
 					</div>

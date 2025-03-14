@@ -1,5 +1,8 @@
-﻿using Bougies.Models;
+﻿using System.Security.Claims;
+using Bougies.Models;
 using Bougies.Repositories;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -61,7 +64,7 @@ namespace Bougies.Controllers
             }
 
             // Asignar imagen por defecto si el usuario no sube una
-            user.Imagen = fileName ?? "users/default-profile.png";
+            user.Imagen = fileName ?? "userprofile.jpg";
 
             bool registrado = await this.repo.RegistrarUser(user.Nombre, user.Apellidos, user.Email, user.Imagen, user.Passwd);
 
@@ -90,19 +93,57 @@ namespace Bougies.Controllers
                 return View();
             }
 
-            HttpContext.Session.SetString("userEmail", user.Email);
-            HttpContext.Session.SetString("userName", user.Nombre);
-            HttpContext.Session.SetString("userImage", user.Imagen);
-            HttpContext.Session.SetInt32("idUser", user.IdUsuario);
-            HttpContext.Session.SetInt32("idRol", user.IdRol);
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.Nombre),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.IdRol == 1 ? "Admin" : "Cliente"),
+                    new Claim("IdUser", user.IdUsuario.ToString()),
+                    new Claim("UserImage", user.Imagen)
+                };
 
-            return RedirectToAction("Productos", "Tienda");
+            ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            ClaimsPrincipal userPrincipal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, new AuthenticationProperties
+            {
+                ExpiresUtc = DateTime.Now.AddHours(1)
+            });
+
+            string controller = TempData["controller"].ToString();
+            string action = TempData["action"].ToString();
+            if (TempData["id"] != null)
+            {
+                string id = TempData["id"].ToString();
+                return RedirectToAction(action, controller, new { id = id });
+            }
+            else
+            {
+                return RedirectToAction(action, controller);
+            }
+
+
+
+            //if (user.IdRol == 1)
+            //{
+            //    return RedirectToAction("Admin", "Index");
+            //}
+            //HttpContext.Session.SetString("userEmail", user.Email);
+            //HttpContext.Session.SetString("userName", user.Nombre);
+            //HttpContext.Session.SetString("userImage", user.Imagen);
+            //HttpContext.Session.SetInt32("idUser", user.IdUsuario);
+            //HttpContext.Session.SetInt32("idRol", user.IdRol);
+
+            //return RedirectToAction("Productos", "Tienda");
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Login");
+            //HttpContext.Session.Clear();
+            //return RedirectToAction("Login");
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Tienda");
         }
 
         public async Task<IActionResult> PerfilUsuario(int idUsuario)

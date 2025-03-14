@@ -1,0 +1,81 @@
+﻿.registro-container {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+    padding: 30px 50px;
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: center;
+}
+
+h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+}
+
+    h2:after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 2px;
+        background-color: #ad9986;
+        margin: 15px auto 0;
+    }
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    font-weight: 400;
+    color: #555;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    border-radius: 4px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+    .form-control:focus {
+        border-color: #ad9986;
+        box-shadow: 0 0 0 0.2rem rgba(173, 153, 134, 0.15);
+    }
+
+.btn-primary {
+    background-color: #ad9986;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 25px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+    .btn-primary:hover {
+        background-color: #9a8573;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(173, 153, 134, 0.3);
+    }
+
+.registerBtn--form:hover {
+    border: 1px solid #ad9986 !important;
+}
