@@ -7,8 +7,8 @@ namespace Bougies.Controllers
 {
     public class AdminController : Controller
     {
-        private IRepositoryAdmin repo;
-        public AdminController(IRepositoryAdmin repo)
+        private IRepositoryBougies repo;
+        public AdminController(IRepositoryBougies repo)
         {
             this.repo = repo;
         }

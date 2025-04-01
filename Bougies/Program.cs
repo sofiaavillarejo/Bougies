@@ -20,9 +20,8 @@ builder.Services.AddAuthentication(options =>
 
 string connectionString = builder.Configuration.GetConnectionString("Bougies");
 builder.Services.AddDbContext<BougiesContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddTransient<IRepositoryAdmin, RepositoryAdmin>();
-builder.Services.AddTransient<RepositoryUsuarios>();
-builder.Services.AddTransient<RepositoryCarrito>();
+builder.Services.AddTransient<IRepositoryBougies, RepositoryBougies>();
+builder.Services.AddTransient<RepositoryBougies>();
 
 builder.Services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
 

@@ -10,9 +10,9 @@ namespace Bougies.Controllers
 {
     public class UsuariosController : Controller
     {
-        private RepositoryUsuarios repo;
+        private RepositoryBougies repo;
 
-        public UsuariosController(RepositoryUsuarios repo)
+        public UsuariosController(RepositoryBougies repo)
         {
             this.repo = repo;
         }
@@ -112,6 +112,11 @@ namespace Bougies.Controllers
 
                 string controller = TempData["controller"]?.ToString() ?? "Tienda";
                 string action = TempData["action"]?.ToString() ?? "Index";
+
+                if (user.IdRol == 1) 
+                {
+                    return RedirectToAction("CrearProducto", "Admin"); // Redirige al panel de control del admin
+                }
 
                 if (TempData["id"] != null)
                 {

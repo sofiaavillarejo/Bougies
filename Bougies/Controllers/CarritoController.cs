@@ -15,11 +15,11 @@ namespace Bougies.Controllers
     public class CarritoController : Controller
     {
         private const string SessionKeyCarrito = "Carrito";
-        private IRepositoryAdmin irepo;
-        private RepositoryCarrito repo;
+        private IRepositoryBougies irepo;
+        private RepositoryBougies repo;
         private IMemoryCache cache;
         private BougiesContext context;
-        public CarritoController(BougiesContext context, IRepositoryAdmin irepo, RepositoryCarrito repo, IMemoryCache cache)
+        public CarritoController(BougiesContext context, IRepositoryBougies irepo, RepositoryBougies repo, IMemoryCache cache)
         {
             this.irepo = irepo;
             this.repo = repo;
