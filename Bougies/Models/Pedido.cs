@@ -36,6 +36,5 @@ namespace Bougies.Models
 
         [Column("Poblacion")]
         public string Poblacion { get; set; }
-
     }
 }

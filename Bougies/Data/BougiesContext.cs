@@ -13,5 +13,6 @@ namespace Bougies.Data
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<DetallesPedido> DetallesPedido {get; set;}
         public DbSet<CuponDescuento> CuponDescuento { get; set; }
+
     }
 }

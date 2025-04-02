@@ -1,4 +1,5 @@
-﻿using Bougies.Models;
+﻿
+using Bougies.Models;
 using Bougies.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -33,7 +34,6 @@ namespace Bougies.Controllers
         }
         public async Task<IActionResult> AddProductCarrito(int id)
         {
-            // 🔹 Obtener el producto de la base de datos
             Producto? prod = await this.irepo.FindProducto(id);
 
             if (prod == null)
@@ -134,7 +134,7 @@ namespace Bougies.Controllers
                     .FirstOrDefaultAsync(c => c.Codigo == cupon && c.Usado == true);
                 if (codigoValor != null)
                 {
-                    
+
                     HttpContext.Session.Remove("DESCUENTO");
                     codigoValor.Usado = false;
                     this.context.Update(codigoValor);
@@ -250,10 +250,5 @@ namespace Bougies.Controllers
         {
             return View();
         }
-
-
-
-
-
     }
 }

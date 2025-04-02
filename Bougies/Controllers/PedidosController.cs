@@ -9,7 +9,8 @@ namespace Bougies.Controllers
     {
         private readonly BougiesContext context;
 
-        public PedidosController(BougiesContext context) {
+        public PedidosController(BougiesContext context)
+        {
             this.context = context;
         }
 
@@ -25,6 +26,7 @@ namespace Bougies.Controllers
             var ped = new Pedido
             {
                 IdUsuario = pedido.IdUsuario,
+                IdPedido = pedido.IdPedido,
                 FechaPedido = pedido.FechaPedido,
                 Total = pedido.Total,
                 Estado = pedido.Estado,
@@ -33,6 +35,7 @@ namespace Bougies.Controllers
                 Ciudad = pedido.Ciudad,
                 CodigoPostal = pedido.CodigoPostal,
                 Poblacion = pedido.Poblacion
+                //Cantidad = pedido.Cantidad
             };
 
             this.context.Pedidos.Add(ped);

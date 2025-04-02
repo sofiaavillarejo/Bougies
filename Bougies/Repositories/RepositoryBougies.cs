@@ -154,21 +154,22 @@ namespace Bougies.Repositories
             await this.context.Pedidos.AddAsync(pedido);
             await this.context.SaveChangesAsync();
 
-            //insertar los detalles del pedido en la bbdd
-            foreach (var item in carrito)
+            int iddetPedido = await this.GetMaxIdDetallesPedido();
+
+            // Recorrer los productos agrupados por IdProducto
+            foreach (var item in carrito.GroupBy(x => x.IdProducto))
             {
                 DetallesPedido detallePed = new DetallesPedido
                 {
-                    Id = await this.GetMaxIdDetallesPedido(),
-                    IdPedido = pedido.IdPedido,
-                    IdProducto = item.IdProducto,
-                    Cantidad = item.Cantidad,
-                    Total = (item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad
+                    Id = iddetPedido++,
+                    IdPedido = pedido.IdPedido, 
+                    IdProducto = item.Key,
+                    Cantidad = item.Sum(x => x.Cantidad),
+                    Total = item.Sum(x => (x.Precio - (x.Precio * (x.Descuento / 100m))) * x.Cantidad)
                 };
 
                 await this.context.DetallesPedido.AddAsync(detallePed);
             }
-
             await this.context.SaveChangesAsync();
             return pedido.IdPedido;
         }
