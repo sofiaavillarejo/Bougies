@@ -22,5 +22,12 @@ namespace Bougies.Models
         [Column("Total")]
         public decimal Total { get; set; }
 
+        // Relaciones
+        [ForeignKey("IdPedido")]
+        public Pedido Pedido { get; set; }
+
+        [ForeignKey("IdProducto")]
+        public Producto Producto { get; set; }
+
     }
 }

@@ -44,9 +44,21 @@ namespace Bougies.Controllers
             return RedirectToAction("ConfirmacionPedido", new { idPedido = ped.IdPedido });
         }
 
-        public IActionResult ConfirmacionPedido(int idPedido)
+        public async Task<IActionResult> ConfirmacionPedido(int idPedido)
         {
-            var pedido = this.context.Pedidos.FirstOrDefault(p => p.IdPedido == idPedido);
+            //var pedido = this.context.DetallesPedido.FirstOrDefault(p => p.IdPedido == idPedido);
+            //if (pedido == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(pedido);
+
+            var pedido = await this.context.Pedidos
+                .Include(p => p.Detalles)
+                .ThenInclude(d => d.Producto)
+                .FirstOrDefaultAsync(p => p.IdPedido == idPedido);
+
             if (pedido == null)
             {
                 return NotFound();

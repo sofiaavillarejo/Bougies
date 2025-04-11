@@ -1,17 +1,41 @@
-﻿@model Bougies.Models.Pedido
+﻿@model Pedido
 <link rel="stylesheet" href="/css/confirmacionpedido.css" type="text/css">
 
 <h2 class="display-5">Confirmación de Pedido</h2>
 
 <div class="container-fluid">
-	<div class="info">
-		<h3>Pedido #@Model.IdPedido</h3>
-		<p>Fecha: @Model.FechaPedido</p>
-		<p>Dirección: @Model.Direccion, @Model.Ciudad, @Model.CodigoPostal, @Model.Poblacion</p>
-		<p>Total: @Model.Total €</p>
-		<p>Estado: @Model.Estado</p>
-		<div style="display: flex; justify-content: center;">
-			<a asp-controller="Tienda" asp-action="Productos">Volver a la tienda</a>
-		</div>
-	</div>
+    <div class="info">
+        <h3>Pedido #@Model.IdPedido</h3>
+        <p>Fecha: @Model.FechaPedido.ToString("dd/MM/yyyy")</p>
+        <p>Dirección: @Model.Direccion, @Model.Ciudad, @Model.CodigoPostal, @Model.Poblacion</p>
+        <p>Total: @Model.Total €</p>
+        <p>Estado: @Model.Estado</p>
+
+        <h3>Detalles del Pedido</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detalle in Model.Detalles)
+                {
+                    <tr>
+                        <td>@detalle.Producto.Nombre</td>
+                        <td>@detalle.Cantidad</td>
+                        <td>@detalle.Producto.Precio €</td>
+                        <td>@(detalle.Cantidad * detalle.Producto.Precio) €</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div style="display: flex; justify-content: center;">
+            <a asp-controller="Tienda" asp-action="Productos">Volver a la tienda</a>
+        </div>
+    </div>
 </div>

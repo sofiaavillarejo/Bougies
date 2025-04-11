@@ -36,5 +36,8 @@ namespace Bougies.Models
 
         [Column("Poblacion")]
         public string Poblacion { get; set; }
+
+        // Relación con DetallesPedido
+        public List<DetallesPedido> Detalles { get; set; }
     }
 }
