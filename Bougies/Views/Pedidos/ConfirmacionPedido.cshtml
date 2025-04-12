@@ -3,13 +3,13 @@
 
 <h2 class="display-5">Confirmación de Pedido</h2>
 
-<div class="container-fluid">
+<div class="container-fluid .confirmacion">
     <div class="info">
         <h3>Pedido #@Model.IdPedido</h3>
-        <p>Fecha: @Model.FechaPedido.ToString("dd/MM/yyyy")</p>
-        <p>Dirección: @Model.Direccion, @Model.Ciudad, @Model.CodigoPostal, @Model.Poblacion</p>
-        <p>Total: @Model.Total €</p>
-        <p>Estado: @Model.Estado</p>
+        <p><span class="label"><i class="fas fa-calendar info-icon"></i>Fecha:</span> @Model.FechaPedido.ToString("dd/MM/yyyy")</p>
+        <p><span class="label"><i class="fas fa-map-marker-alt info-icon"></i>Dirección:</span> @Model.Direccion, @Model.Ciudad, @Model.CodigoPostal, @Model.Poblacion</p>
+        <p><span class="label"><i class="fas fa-tag info-icon"></i>Total:</span> <span class="total">@Model.Total €</span></p>
+        <p><span class="label"><i class="fas fa-check-circle info-icon"></i>Estado:</span> <span class="status">@Model.Estado</span></p>
 
         <h3>Detalles del Pedido</h3>
         <table class="table">
@@ -35,7 +35,7 @@
         </table>
 
         <div style="display: flex; justify-content: center;">
-            <a asp-controller="Tienda" asp-action="Productos">Volver a la tienda</a>
+            <a asp-controller="Tienda" asp-action="Productos" class="return-button">Volver a la tienda</a>
         </div>
     </div>
 </div>
