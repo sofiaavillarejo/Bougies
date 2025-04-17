@@ -1,11 +1,11 @@
 ﻿using System.Collections.Specialized;
 using System.Data;
 using Bougies.Data;
-using Bougies.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using NugetBougies.Models;
 
 #region STORED PROCEDURES
 #endregion

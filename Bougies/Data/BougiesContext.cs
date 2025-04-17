@@ -1,4 +1,4 @@
-﻿using Bougies.Models;
+﻿using NugetBougies.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bougies.Data

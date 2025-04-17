@@ -1,10 +1,9 @@
 ﻿using System.Security.Claims;
-using Bougies.Models;
+using NugetBougies.Models;
 using Bougies.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Bougies.Controllers
 {

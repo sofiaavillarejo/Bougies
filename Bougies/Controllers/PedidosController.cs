@@ -1,5 +1,5 @@
 ﻿using Bougies.Data;
-using Bougies.Models;
+using NugetBougies.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

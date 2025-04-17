@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Bougies.Models.Producto>
+﻿@model List<Producto>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,28 +13,28 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                Id producto
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                Nombre
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
+                Descripcion
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Precio)
+                Precio
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Stock)
+                Stock
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdCategoria)
+               Id Categoria
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdDescuento)
+                Id Descuento
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Imagen)
+                Imagen
             </th>
             <th></th>
         </tr>

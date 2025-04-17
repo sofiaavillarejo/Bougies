@@ -1,4 +1,4 @@
-﻿using Bougies.Models;
+﻿using NugetBougies.Models;
 
 namespace Bougies.Repositories
 {

@@ -1,7 +1,7 @@
-﻿using Bougies.Models;
-using Bougies.Repositories;
+﻿using Bougies.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NugetBougies.Models;
 
 namespace Bougies.Controllers
 {

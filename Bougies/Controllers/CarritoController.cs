@@ -1,6 +1,4 @@
-﻿
-using Bougies.Models;
-using Bougies.Repositories;
+﻿using Bougies.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Bougies.Extensions;
@@ -10,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Bougies.Filters;
 using System.Security.Claims;
 using System.Runtime.InteropServices;
+using NugetBougies.Models;
 
 namespace Bougies.Controllers
 {
