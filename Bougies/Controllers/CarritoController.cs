@@ -9,6 +9,7 @@ using Bougies.Filters;
 using System.Security.Claims;
 using System.Runtime.InteropServices;
 using NugetBougies.Models;
+using Bougies.Services;
 
 namespace Bougies.Controllers
 {
@@ -19,31 +20,34 @@ namespace Bougies.Controllers
         private RepositoryBougies repo;
         private IMemoryCache cache;
         private BougiesContext context;
-        public CarritoController(BougiesContext context, IRepositoryBougies irepo, RepositoryBougies repo, IMemoryCache cache)
+        private ServiceBougies service;
+
+        public CarritoController(BougiesContext context, IRepositoryBougies irepo, RepositoryBougies repo, IMemoryCache cache, ServiceBougies service)
         {
             this.irepo = irepo;
             this.repo = repo;
             this.cache = cache;
             this.context = context;
+            this.service = service;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Carrito> carrito = ObtenerCarrito();
+            List<Carrito> carrito = this.ObtenerCarrito();
             return View(carrito);
         }
         public async Task<IActionResult> AddProductCarrito(int id)
         {
-            Producto? prod = await this.irepo.FindProducto(id);
+            Producto? prod = await this.service.FindProducto(id);
 
             if (prod == null)
             {
                 return NotFound();
             }
 
-            List<Carrito> carrito = ObtenerCarrito();
+            List<Carrito> carrito = this.ObtenerCarrito();
 
             //obtener descuentos
-            List<Descuento> descuentos = await this.irepo.GetDescuentosAsync();
+            List<Descuento> descuentos = await this.service.GetDescuentosAsync();
             int idDescuento = descuentos.FirstOrDefault(d => d.Id == prod.IdDescuento).Id;
             int descuento = descuentos.FirstOrDefault(d => d.Id == prod.IdDescuento).Valor;
 
@@ -82,6 +86,7 @@ namespace Bougies.Controllers
             HttpContext.Session.SetInt32("GastosEnvio", gastosEnvio);
             return HttpContext.Session.GetObject<List<Carrito>>(SessionKeyCarrito) ?? new List<Carrito>();
         }
+
         private void GuardarCarrito(List<Carrito> carrito)
         {
             HttpContext.Session.SetObject(SessionKeyCarrito, carrito);
@@ -120,7 +125,7 @@ namespace Bougies.Controllers
         // ----------------- ELIMINAR PRODUCTO DEL CARRITO -----------------
         public async Task<IActionResult> EliminarDelCarrito(int idProducto)
         {
-            List<Carrito> carrito = ObtenerCarrito();
+            List<Carrito> carrito = this.ObtenerCarrito();
             var cupon = HttpContext.Session.GetString("DESCUENTO");
 
             carrito.RemoveAll(p => p.IdProducto == idProducto);
@@ -152,7 +157,7 @@ namespace Bougies.Controllers
         [HttpPost]
         public async Task<IActionResult> TramitarPedido(int idMetodoPago, string direccion, string ciudad, string codigoPostal, string poblacion)
         {
-            List<Carrito> carrito = ObtenerCarrito();
+            List<Carrito> carrito = this.ObtenerCarrito();
 
             if (carrito.Count == 0)
             {
@@ -211,7 +216,7 @@ namespace Bougies.Controllers
             }
 
             // Buscar el cupón en la base de datos
-            CuponDescuento codigoCupon = await this.repo.FindCuponDescuentoAsync(cupon);
+            CuponDescuento codigoCupon = await this.repo.FindCuponDescuentoAsync(cupon); //CAMBIADO A SERVICE
             HttpContext.Session.SetString("DESCUENTO", codigoCupon.Codigo);
 
             if (codigoCupon == null || !codigoCupon.Activo || codigoCupon.Usado)
@@ -222,7 +227,7 @@ namespace Bougies.Controllers
             else
             {
                 // Si el cupón es válido, calcular el descuento sobre el total del carrito
-                List<Carrito> carrito = ObtenerCarrito();
+                List<Carrito> carrito = this.ObtenerCarrito();
 
                 decimal total = carrito.Sum(item => item.Precio * item.Cantidad);
                 decimal descuentoTotal = (total * codigoCupon.Descuento) / 100;
@@ -232,7 +237,7 @@ namespace Bougies.Controllers
                 HttpContext.Session.SetDecimal("DescuentoTotal", descuentoTotal);
                 HttpContext.Session.SetDecimal("TotalConDescuento", totalConDescuento);
                 // Marcar el cupón como usado
-                await this.repo.CuponUsado(codigoCupon.Codigo);
+                await this.service.CuponUsado(codigoCupon.Codigo);
 
                 // Guardar el carrito si es necesario (aunque no modificamos individualmente los productos)
                 GuardarCarrito(carrito);
@@ -240,7 +245,7 @@ namespace Bougies.Controllers
                 TempData["Success"] = "Cupón aplicado correctamente.";
             }
 
-            List<Carrito> carritoActualizado = ObtenerCarrito();
+            List<Carrito> carritoActualizado = this.ObtenerCarrito();
             return View("Index", carritoActualizado);
         }
 

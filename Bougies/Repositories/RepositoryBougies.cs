@@ -304,6 +304,12 @@ namespace Bougies.Repositories
         }
 
         //--------USER PERFIL---------------//
+        public async Task<Usuario> GetInfoUserAsync(string email)
+        {
+            var user = await this.context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+            return user;
+        }
+
         public async Task<Usuario> PerfilUsuarioAsync(int idUsuario)
         {
             var user = await this.context.Usuarios.FirstOrDefaultAsync(u => u.IdUsuario == idUsuario);
@@ -316,18 +322,15 @@ namespace Bougies.Repositories
             if (user == null)
                 return false;
 
-            // Actualizar datos
             user.Nombre = usuario.Nombre;
             user.Apellidos = usuario.Apellidos;
             user.Email = usuario.Email;
 
-            // Si el usuario ingresó una nueva contraseña, se actualiza
             if (!string.IsNullOrEmpty(nuevaPasswd))
             {
                 user.Passwd = BCrypt.Net.BCrypt.HashPassword(nuevaPasswd);
             }
 
-            // Si hay nueva imagen, se actualiza
             if (nuevaImagen != null)
             {
                 string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(nuevaImagen.FileName);

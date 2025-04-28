@@ -11,6 +11,7 @@
 			}
 			<h2 class="text-center">Iniciar Sesión</h2>
 			<form method="post">
+				@Html.AntiForgeryToken()
 				<div class="mb-3">
 					<label asp-for="@Model.Email" class="form-label">Correo Electrónico</label>
 					<input asp-for="@Model.Email" class="form-control" placeholder="Ingrese su email" required />

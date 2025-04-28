@@ -4,6 +4,7 @@ using NugetBougies.Models;
 using Bougies.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Bougies.Services;
 
 namespace Bougies.Controllers
 {
@@ -12,26 +13,29 @@ namespace Bougies.Controllers
         private readonly ILogger<TiendaController> _logger;
         private IRepositoryBougies repo;
         private BougiesContext context;
-        public TiendaController(ILogger<TiendaController> logger, IRepositoryBougies repo, BougiesContext context)
+        private ServiceBougies service;
+
+        public TiendaController(ILogger<TiendaController> logger, IRepositoryBougies repo, BougiesContext context, ServiceBougies service)
         {
             _logger = logger;
             this.repo = repo;
             this.context = context;
+            this.service = service;
         }
 
         public async Task<IActionResult> Index()
         {
-            List<Producto> productos = await this.repo.GetProductosAsync();
+            List<Producto> productos = await this.service.GetProductosAsync();
             return View(productos);
         }
 
         public async Task<IActionResult> Productos()
         {
-            List<Producto> productos = await this.repo.GetProductosAsync();
+            List<Producto> productos = await this.service.GetProductosAsync();
 
             foreach (var producto in productos)
             {
-                int descuento = await this.repo.GetValorDescuentoAsync(producto.IdDescuento);
+                int descuento = await this.service.GetValorDescuentoAsync(producto.IdDescuento);
 
                 if (descuento > 0)
                 {
@@ -48,8 +52,8 @@ namespace Bougies.Controllers
 
         public async Task<IActionResult> DetalleProducto(int idProducto)
         {
-            Producto prod = await this.repo.FindProducto(idProducto);
-            int descuento = prod.IdDescuento != null ? await this.repo.GetValorDescuentoAsync(prod.IdDescuento) : 0;
+            Producto prod = await this.service.FindProducto(idProducto);
+            int descuento = prod.IdDescuento != null ? await this.service.GetValorDescuentoAsync(prod.IdDescuento) : 0;
 
             // Calcular precio con descuento y asignarlo al modelo
             prod.PrecioDescuento = prod.Precio - (prod.Precio * ((decimal)descuento / 100));
@@ -72,7 +76,7 @@ namespace Bougies.Controllers
             foreach (var producto in productos)
             {
                 // Get discount value (similar to the 'Productos' action)
-                int descuento = await this.repo.GetValorDescuentoAsync(producto.IdDescuento);
+                int descuento = await this.service.GetValorDescuentoAsync(producto.IdDescuento);
 
                 // Apply discount logic
                 decimal precioDescuento = (descuento > 0)
@@ -95,11 +99,11 @@ namespace Bougies.Controllers
 
         public async Task<IActionResult> Ofertas()
         {
-            List<Producto> productosRebajados = await this.repo.GetProductosRebajadosAsync();
+            List<Producto> productosRebajados = await this.service.GetProductosRebajadosAsync();
 
             foreach (var producto in productosRebajados)
             {
-                int descuento = await this.repo.GetValorDescuentoAsync(producto.IdDescuento);
+                int descuento = await this.service.GetValorDescuentoAsync(producto.IdDescuento);
 
                 if (descuento > 0)
                 {

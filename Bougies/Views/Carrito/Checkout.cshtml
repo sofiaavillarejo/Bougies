@@ -9,12 +9,19 @@
 			<!-- 🚀 PASO 1: Información Personal -->
 			<div class="step" id="step1">
 				<input type="hidden" name="IdUsuario" value="2" />
-				<h3>Información Personal</h3>
-				<label>Nombre</label>
-				<input type="text" name="nombre" required value="@Context.User.Identity.Name" readonly />
+				@if (User.Identity.IsAuthenticated)
+				{
+					<h3>Información Personal</h3>
+					<label>Nombre</label>
+					<input type="text" name="nombre" required value="@User.Identity.Name" readonly />
 
-				<label>Email</label>
-				<input type="email" name="email" required value="@User.FindFirst(ClaimTypes.Email).Value" readonly />
+					<label>Email</label>
+					<input type="email" name="email" required value="@User.FindFirst(ClaimTypes.Email)?.Value" readonly />
+				}
+				else
+				{
+					<p>Debes estar autenticado para continuar con la compra.</p>
+				}
 
 				<div class="btn-container">
 					<button type="button" onclick="nextStep(2)">Continuar</button>

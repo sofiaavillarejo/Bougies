@@ -1,12 +1,22 @@
+using Azure.Security.KeyVault.Secrets;
 using Bougies.Data;
 using Bougies.Repositories;
+using Bougies.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddAntiforgery();
+builder.Services.AddAzureClients(factory =>
+{
+    factory.AddSecretClient(builder.Configuration.GetSection("KeyVault"));
 
+});
+SecretClient secretClient = builder.Services.BuildServiceProvider().GetService<SecretClient>();
+KeyVaultSecret secret = await secretClient.GetSecretAsync("SqlAzure");
+string connectionString = secret.Value;
+builder.Services.AddAntiforgery();
+builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
@@ -18,10 +28,10 @@ builder.Services.AddAuthentication(options =>
 }).AddCookie();
 
 
-string connectionString = builder.Configuration.GetConnectionString("Bougies");
 builder.Services.AddDbContext<BougiesContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddTransient<IRepositoryBougies, RepositoryBougies>();
 builder.Services.AddTransient<RepositoryBougies>();
+builder.Services.AddTransient<ServiceBougies>();
 
 builder.Services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
 

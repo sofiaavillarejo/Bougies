@@ -54,10 +54,7 @@ namespace Bougies.Controllers
 
             //return View(pedido);
 
-            var pedido = await this.context.Pedidos
-                .Include(p => p.Detalles)
-                .ThenInclude(d => d.Producto)
-                .FirstOrDefaultAsync(p => p.IdPedido == idPedido);
+            var pedido = await this.context.Pedidos.Include(p => p.Detalles).ThenInclude(d => d.Producto).FirstOrDefaultAsync(p => p.IdPedido == idPedido);
 
             if (pedido == null)
             {

@@ -4,16 +4,21 @@ using Bougies.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Bougies.Filters;
+using Bougies.Services;
+using NugetBougies.DTO;
 
 namespace Bougies.Controllers
 {
     public class UsuariosController : Controller
     {
         private RepositoryBougies repo;
+        private ServiceBougies service;
 
-        public UsuariosController(RepositoryBougies repo)
+        public UsuariosController(ServiceBougies service, RepositoryBougies repo)
         {
             this.repo = repo;
+            this.service = service;
         }
 
         public IActionResult Registro()
@@ -62,19 +67,19 @@ namespace Bougies.Controllers
                 }
             }
 
-            // Asignar imagen por defecto si el usuario no sube una
+            // Asignar imagen por defecto si no sube
             user.Imagen = fileName ?? "userprofile.jpg";
 
-            bool registrado = await this.repo.RegistrarUser(user.Nombre, user.Apellidos, user.Email, user.Imagen, user.Passwd);
+            bool registrado = await this.service.RegistrarUser(user.Nombre, user.Apellidos, user.Email, user.Passwd, user.Imagen);
 
             if (!registrado)
             {
                 return Json(new { success = false, message = "El email ya está registrado." });
             }
 
-            // Si todo va bien, se devuelve éxito
             return Json(new { success = true, message = "¡Ya puedes iniciar sesión! 🚀" });
         }
+
 
         public IActionResult Login()
         {
@@ -83,79 +88,50 @@ namespace Bougies.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string passwd)
+        public async Task<IActionResult> Login(LoginModel model)
         {
-            Usuario user = await this.repo.LoginUser(email, passwd);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(passwd, user.Passwd))
+            string token = await this.service.GetTokenAsync(model.Email, model.Passwd);
+            if (token == null)
             {
                 ViewData["Error"] = "Email o contraseña incorrectos";
                 return View();
-            }else
-            {
-                var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Nombre),
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Role, user.IdRol == 1 ? "Admin" : "Cliente"),
-                        new Claim("IdUser", user.IdUsuario.ToString()),
-                        new Claim("UserImage", user.Imagen)
-                    };
-
-                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                ClaimsPrincipal userPrincipal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, new AuthenticationProperties
-                {
-                    ExpiresUtc = DateTime.Now.AddHours(1)
-                });
-
-                string controller = TempData["controller"]?.ToString() ?? "Tienda";
-                string action = TempData["action"]?.ToString() ?? "Index";
-
-                if (user.IdRol == 1) 
-                {
-                    return RedirectToAction("CrearProducto", "Admin"); // Redirige al panel de control del admin
-                }
-
-                if (TempData["id"] != null)
-                {
-                    string id = TempData["id"].ToString();
-                    return RedirectToAction(action, controller, new { id = id });
-                }
-                else
-                {
-                    return RedirectToAction(action, controller);
-                }
             }
-
-
-
-
-            //if (user.IdRol == 1)
-            //{
-            //    return RedirectToAction("Admin", "Index");
-            //}
-            //HttpContext.Session.SetString("userEmail", user.Email);
-            //HttpContext.Session.SetString("userName", user.Nombre);
-            //HttpContext.Session.SetString("userImage", user.Imagen);
-            //HttpContext.Session.SetInt32("idUser", user.IdUsuario);
-            //HttpContext.Session.SetInt32("idRol", user.IdRol);
-
-            //return RedirectToAction("Productos", "Tienda");
+            else
+            {
+                Usuario user = await this.repo.GetInfoUserAsync(model.Email);
+                if (user == null)
+                {
+                    ViewData["Error"] = "El usuario no existe.";
+                    return View();
+                }
+                //HttpContext.Session.SetString("TOKEN", token);
+                ClaimsIdentity identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
+                identity.AddClaim(new Claim(ClaimTypes.Name, user.Nombre));
+                identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.IdUsuario.ToString()));
+                identity.AddClaim(new Claim("IdUser", user.IdUsuario.ToString()));
+                identity.AddClaim(new Claim("UserImage", user.Imagen));
+                identity.AddClaim(new Claim("TOKEN", token));
+                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTime.UtcNow.AddHours(1)
+                });
+                return RedirectToAction("Index", "Tienda");
+            }
+           
         }
 
         public async Task<IActionResult> Logout()
         {
-            //HttpContext.Session.Clear();
-            //return RedirectToAction("Login");
-
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Tienda");
         }
 
-        public async Task<IActionResult> PerfilUsuario(int idUsuario)
+        [AuthorizeUsers]
+        public async Task<IActionResult> PerfilUsuario()
         {
-            Usuario user = await this.repo.PerfilUsuarioAsync(idUsuario);
+            UserModel user = await this.service.PerfilUsuarioAsync();
             return View(user);
         }
 
@@ -188,9 +164,11 @@ namespace Bougies.Controllers
             return RedirectToAction("PerfilUsuario", new { idUsuario = usuario.IdUsuario });
         }
 
-        public async Task<IActionResult> PedidosUsuario(int idUsuario)
+
+        [AuthorizeUsers]
+        public async Task<IActionResult> PedidosUsuario()
         {
-            var pedidos = await this.repo.GetPedidoUserAsync(idUsuario);
+            List<Pedido> pedidos = await this.service.GetPedidoUserAsync();
 
             if (pedidos == null || pedidos.Count == 0)
             {
@@ -201,3 +179,62 @@ namespace Bougies.Controllers
         }
     }
 }
+
+
+//Usuario user = await this.service.GetTokenAsync(email, passwd);
+//if (user == null || !BCrypt.Net.BCrypt.Verify(passwd, user.Passwd))
+//{
+//    ViewData["Error"] = "Email o contraseña incorrectos";
+//    return View();
+//}else
+//{
+//    var claims = new List<Claim>
+//        {
+//            new Claim(ClaimTypes.Name, user.Nombre),
+//            new Claim(ClaimTypes.Email, user.Email),
+//            new Claim(ClaimTypes.Role, user.IdRol == 1 ? "Admin" : "Cliente"),
+//            new Claim("IdUser", user.IdUsuario.ToString()),
+//            new Claim("UserImage", user.Imagen)
+//        };
+
+//    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+//    ClaimsPrincipal userPrincipal = new ClaimsPrincipal(identity);
+
+//    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, new AuthenticationProperties
+//    {
+//        ExpiresUtc = DateTime.Now.AddHours(1)
+//    });
+
+//    string controller = TempData["controller"]?.ToString() ?? "Tienda";
+//    string action = TempData["action"]?.ToString() ?? "Index";
+
+//    if (user.IdRol == 1) 
+//    {
+//        return RedirectToAction("CrearProducto", "Admin"); // Redirige al panel de control del admin
+//    }
+
+//    if (TempData["id"] != null)
+//    {
+//        string id = TempData["id"].ToString();
+//        return RedirectToAction(action, controller, new { id = id });
+//    }
+//    else
+//    {
+//        return RedirectToAction(action, controller);
+//    }
+//}
+
+
+
+
+//if (user.IdRol == 1)
+//{
+//    return RedirectToAction("Admin", "Index");
+//}
+//HttpContext.Session.SetString("userEmail", user.Email);
+//HttpContext.Session.SetString("userName", user.Nombre);
+//HttpContext.Session.SetString("userImage", user.Imagen);
+//HttpContext.Session.SetInt32("idUser", user.IdUsuario);
+//HttpContext.Session.SetInt32("idRol", user.IdRol);
+
+//return RedirectToAction("Productos", "Tienda");
