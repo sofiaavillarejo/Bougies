@@ -37,7 +37,7 @@
 
 			<div class="divider"></div>
 
-			<a href="#" class="return-button">Volver a la tienda</a>
+			<a asp-controller="Tienda" asp-action="Productos" class="return-button">Volver a la tienda</a>
 		</div>
 	</div> <!-- Cierre del div info -->
 }
@@ -47,6 +47,6 @@ else
 		<div class="no-orders">
 			<p>No se encontraron pedidos para este usuario.</p>
 		</div>
-		<a href="#" class="return-button">Ir a la tienda</a>
+		<a asp-controller="Tienda" asp-action="Productos" class="return-button">Ir a la tienda</a>
 	</div>
 }
