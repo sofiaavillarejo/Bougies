@@ -143,8 +143,8 @@
 					<div class="info-precio">
 						@{
 							decimal precioProductos = Model.Sum(item =>
-							(item.Descuento > 0 ?
-							(item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad : item.Precio * item.Cantidad));
+								(item.Descuento > 0 ?
+								(item.Precio - (item.Precio * (item.Descuento / 100m))) * item.Cantidad : item.Precio * item.Cantidad));
 
 							string precioConFormato = precioProductos.ToString("C");
 						}
